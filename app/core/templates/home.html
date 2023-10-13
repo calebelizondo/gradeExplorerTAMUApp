@@ -1,3 +1,383 @@
-fdkh aldkf nd
-fd f;asdjf hsdalf andsfd
-fds fkjnfa ;sdk
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Dist display test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: center; /* Center content horizontally */
+            padding: 20px;
+        }
+
+        .top-panel {
+            width: 100%; /* Take up full width of the screen */
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px; /* Add margin between top panel and cards */
+        }
+
+        .left-panel {
+            flex: 1;
+            padding: 10px;
+            background-color: #ffffff;
+            height:200px;
+        }
+
+        .right-panel {
+            flex: 1;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            overflow-y: auto; /* Add scroll when needed */
+            height: 200px; /* Limit the height of the professors list */
+        }
+
+        /* Style for text inputs */
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Style for labels */
+        label {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* Style for the professors list */
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .professor-cards-container {
+            width: 100%;
+            height: 250px;
+            padding: 10px;
+            overflow-x: auto; /* Enable horizontal scrolling */
+            white-space: nowrap; /* Prevent cards from wrapping to a new row */
+        }
+
+        .professor-cards {
+            display: flex; /* Display cards in a horizontal row *
+            justify-content: flex-start; /* Align cards to the start of the container */
+            height: 100%;
+        }
+
+        .professor-card {
+            width: 200px; /* Set a fixed width for each card */
+            height: 90%; /* Adjust the height as needed */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        .professor-name {
+            font-weight: bold;
+        }
+
+        /* Navigation buttons */
+        .nav-buttons {
+            margin-top: 10px;
+        }
+
+        .nav-button {
+            padding: 5px 10px;
+            margin-right: 10px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f5f5f5;
+        }
+
+        .highlighted {
+            border: 1px solid #00ff2a;
+            border-radius: 2px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    
+        
+    <div class="top-panel">
+        <div class="left-panel">
+            <label for="subjectSelect">Enter a subject code:</label>
+            <input type="text" id="subjectSelect" list="subjects" placeholder="CSCE">
+            <datalist id="subjects">
+            </datalist>
+            <br> <br>
+            <label for="courseSelect">Enter a course number:</label>
+            <input type="text" id="courseSelect" list="courseNumbers" placeholder="123">
+            <datalist id="courseNumbers">
+            </datalist>
+        </div>
+
+        <div class="right-panel">
+            <form id="professorsForm">
+                <ul id="professorsList">
+                    <!-- Professors will be added here dynamically -->
+                </ul>
+            </form>
+        </div>
+    </div>
+
+    <div class="professor-cards-container">
+        <div class="professor-cards" id="professorCards">
+            <!-- Professor cards will be added here dynamically -->
+        </div>
+    </div>
+
+    <script>
+
+        course_data = {};
+        current_subject_code = "";
+        professorsData = {};
+        
+        // Fetch JSON data and populate the subject codes dropdown
+        fetch('http://127.0.0.1:8000/get_subject_codes')
+            .then(response => response.json())
+            .then(data => {
+        
+                course_data = data;
+                const subjectSelect = document.getElementById('subjects');
+                data.forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject['subject_code'];
+                    option.textContent = subject['subject_code'];
+                    subjectSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+
+        //detect whether a subject has been selected. If so, populate 
+        document.getElementById('subjectSelect').addEventListener('input', () => {
+            const typedSubjectCode = document.getElementById('subjectSelect').value;
+
+            try {
+                course_codes = course_data.filter(item => item.subject_code === typedSubjectCode.toUpperCase())[0].course_numbers;
+
+                const courseNumbersDatalist = document.getElementById('courseNumbers');
+                // Clear existing options in the datalist
+                courseNumbersDatalist.innerHTML = '';
+
+                course_codes.forEach(courseCode => {
+                    const option = document.createElement('option');
+                    option.value = courseCode;
+                    option.textContent = courseCode;
+                    courseNumbersDatalist.appendChild(option);
+                });
+
+                input = current_subject_code;
+                
+
+            }catch(err){
+                console.log("subject not found");
+            }
+        });
+
+
+    function addProfessorsToForm() {
+        const professorsList = document.getElementById('professorsList');
+        const professorCards= document.getElementById('professorCards');
+        professorsList.innerHTML = "";
+        professorCards.innerHTML = "";
+
+        // Loop through the professor data and create checkboxes
+        for (const professorInfo of professorsData) {
+            const listItem = document.createElement('li');
+            const label = document.createElement('label');
+            const checkbox = document.createElement('input');
+
+            checkbox.type = 'checkbox';
+            checkbox.name = 'professors';
+            checkbox.value = professorInfo.professor;
+
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(professorInfo.professor));
+            listItem.appendChild(label);
+            professorsList.appendChild(listItem);
+        }
+    }
+
+    // Function to find and highlight the card with the highest GPA
+function highlightHighestGpaCard() {
+    const professorCardsContainer = document.querySelector('.professor-cards');
+    const cards = Array.from(professorCardsContainer.querySelectorAll('.professor-card'));
+
+    // Find the card with the highest GPA
+    let highestGpa = -1;
+    let highestGpaCardIndex = -1;
+
+    cards.forEach((card, index) => {
+        const gpaElement = card.querySelector('.professor-gpa');
+        const gpa = parseFloat(gpaElement.textContent.split(' ')[1]); // Extract GPA value
+
+        if (gpa > highestGpa) {
+            highestGpa = gpa;
+            highestGpaCardIndex = index;
+        }
+    });
+
+    // Move the highest GPA card to the front
+    if (highestGpaCardIndex >= 0) {
+        professorCardsContainer.firstChild.classList.remove('highlighted');
+        const highestGpaCard = cards[highestGpaCardIndex];
+        professorCardsContainer.insertBefore(highestGpaCard, professorCardsContainer.firstChild);
+
+        // Highlight the card
+        highestGpaCard.classList.add('highlighted');
+    }
+}
+
+        //detect if a course has been selected. If so, get the professors
+        document.getElementById('courseSelect').addEventListener('input', () => {
+            const typedSubjectCode = document.getElementById('subjectSelect').value;
+            const typedCourseCode = document.getElementById('courseSelect').value;
+            if ((course_data.filter(item => item.subject_code === typedSubjectCode.toUpperCase() && item.course_numbers.includes(typedCourseCode))).length !== 0){
+                fetch(`http://127.0.0.1:8000/get_profs/${typedSubjectCode.toUpperCase()}/${typedCourseCode}`)
+                .then(response => response.json())
+                .then(data => {
+
+                if (data.length !== 0){
+                    professorsData = data;
+    
+                    addProfessorsToForm();
+                }
+
+            })
+            .catch(error => console.error('Error fetching data:', error));
+            }
+            
+        });
+
+
+    // Function to create a professor card with GPA and grade breakdown chart
+function createProfessorCard(professorName, gpa, gradeBreakdown) {
+    const card = document.createElement('div');
+    card.classList.add('professor-card');
+    gpa = Math.round(gpa * 100) / 100;
+
+
+    const professorNameElement = document.createElement('p');
+    professorNameElement.classList.add('professor-name');
+    professorNameElement.textContent = professorName;
+
+    const professorGpaElement = document.createElement('p');
+    professorGpaElement.classList.add('professor-gpa');
+    professorGpaElement.textContent = `GPA: ${gpa}`;
+
+    const chartCanvas = document.createElement('canvas');
+    chartCanvas.classList.add('grade-breakdown-chart');
+    chartCanvas.width = 150;
+    chartCanvas.height = 100;
+
+    card.appendChild(professorNameElement);
+    card.appendChild(professorGpaElement);
+    card.appendChild(chartCanvas);
+
+    // Add the card to the professor cards container
+    const professorCardsContainer = document.querySelector('.professor-cards');
+    professorCardsContainer.appendChild(card);
+
+    // Create a bar chart using Chart.js
+    const ctx = chartCanvas.getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            datasets: [{
+                data: gradeBreakdown, // Example grade breakdown data
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 205, 86, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 205, 86, 1)',
+                    'rgba(54, 162, 235, 1)',
+                ],
+                borderWidth: 1,
+            }],
+        },
+        options: {
+            scales: {
+            y: {
+                beginAtZero: true,
+                display: false, // Hide y-axis labels
+            },
+        },
+        plugins: {
+            legend: {
+                display: false, // Hide legend
+            },
+        },
+        },
+    });
+}
+
+    // Event listener for checkbox changes
+    document.addEventListener('change', function (event) {
+        if (event.target.type === 'checkbox' && event.target.name === 'professors') {
+            const professorName = event.target.value;
+
+            if (event.target.checked) {
+                gpa = 0;
+                grade_dist = {};
+
+                //get the gpa and grade distribution
+                for (const i of professorsData){
+                    if (i.professor === professorName){
+                        gpa = i.average_gpa;
+                        grade_dist = i.grade_distribution;
+                    }
+                }
+
+                // If the checkbox is checked, create a card
+                createProfessorCard(professorName, gpa, grade_dist);
+                
+            } else {
+                // If the checkbox is unchecked, remove the corresponding card
+                const professorCardsContainer = document.querySelector('.professor-cards');
+                const cards = professorCardsContainer.querySelectorAll('.professor-card');
+
+                cards.forEach(card => {
+                    if (card.querySelector('.professor-name').textContent === professorName) {
+                        card.remove();
+                    }
+                });
+            }
+            highlightHighestGpaCard(); 
+        }
+    });
+    </script>
+</body>
+</html>
