@@ -24,6 +24,7 @@ def calculate_gpa(grade_counts):
     return total_points / total_students
 
 def get_grades(request, subject_code, course_code):
+
     subject_code = subject_code.upper()
     course_code = course_code.upper()
 
@@ -87,6 +88,10 @@ def get_subject_codes(request):
 
 
 def get_evals(request, subject_code, course_code, prof_name):
+
+    
+    prof_name = prof_name.replace("+", " ")
+
     sections = Section_grades.objects.filter(subject_code=subject_code, course_code=course_code, professor_name=prof_name)
     a_1 = [0, 0, 0]
     a_2 = [0, 0, 0, 0]
@@ -96,21 +101,21 @@ def get_evals(request, subject_code, course_code, prof_name):
     a_6 = [0, 0, 0, 0, 0, 0]
     for section in sections:
         for i in range(len(section.answers_one)): 
-            a_1[i] += section.answers_1[i]
+            a_1[i] += section.answers_one[i]
         for i in range(len(section.answers_two)): 
-            a_2[i] += section.answers_2[i]
+            a_2[i] += section.answers_two[i]
         for i in range(len(section.answers_three)): 
-            a_3[i] += section.answers_3[i]
+            a_3[i] += section.answers_three[i]
         for i in range(len(section.answers_four)): 
-            a_4[i] += section.answers_4[i]
+            a_4[i] += section.answers_four[i]
         for i in range(len(section.answers_five)): 
-            a_5[i] += section.answers_5[i]
+            a_5[i] += section.answers_five[i]
         for i in range(len(section.answers_six)): 
-            a_6[i] += section.answers_6[i]
+            a_6[i] += section.answers_six[i]
 
     eval_answers = {
         'name' : prof_name, 
-        'eval_answers' : {a_1, a_2, a_3, a_4, a_5, a_6} 
+        'eval_answers' : [a_1, a_2, a_3, a_4, a_5, a_6]
     }
 
     return JsonResponse(eval_answers, safe=False)
