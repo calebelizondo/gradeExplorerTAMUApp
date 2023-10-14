@@ -86,19 +86,29 @@ def get_subject_codes(request):
     # Convert the subject_data list to JSON
     return JsonResponse(subject_data, safe=False)
 
+#given list of answers, calculate score
+def get_eval_score(responses):
+    total_responses = sum(responses)
+    score = 0
+    for i in range(len(responses)):
+        score += i * (responses[i] / total_responses)
+    return score
 
+#returns a professor's evaluation scores given a name, subject code and course number
 def get_evals(request, subject_code, course_code, prof_name):
 
-    
+    #spaces cannot be in urls, so each space in the name was replaced with a '+'
     prof_name = prof_name.replace("+", " ")
 
     sections = Section_grades.objects.filter(subject_code=subject_code, course_code=course_code, professor_name=prof_name)
+
     a_1 = [0, 0, 0]
     a_2 = [0, 0, 0, 0]
     a_3 = [0, 0, 0, 0]
     a_4 = [0, 0, 0, 0]
     a_5 = [0, 0, 0, 0, 0, 0]
     a_6 = [0, 0, 0, 0, 0, 0]
+
     for section in sections:
         for i in range(len(section.answers_one)): 
             a_1[i] += section.answers_one[i]
@@ -113,8 +123,11 @@ def get_evals(request, subject_code, course_code, prof_name):
         for i in range(len(section.answers_six)): 
             a_6[i] += section.answers_six[i]
 
+    question_scores = [get_eval_score(a_1), get_eval_score(a_2), get_eval_score(a_3), get_eval_score(a_4), get_eval_score(a_5), get_eval_score(a_6)]
+
     eval_answers = {
         'name' : prof_name, 
+        'question_scores' : question_scores,
         'eval_answers' : [a_1, a_2, a_3, a_4, a_5, a_6]
     }
 

@@ -118,12 +118,38 @@
             border: 1px solid #00ff2a;
             border-radius: 2px;
         }
+
+        .question-container {
+            display: flex;
+            align-items: left; /* Align content to the left */
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .best-prof-chart-container {
+            flex: 1; /* Take up 1/3 of available space */
+            max-width: 100%; /* Set a maximum width so it doesn't get too wide */
+        }
+
+        .text-container {
+            flex: 2; /* Take up 2/3 of available space */
+        }
+
+        .small-text {
+            font-size: 14px; /* Set a smaller font size */
+            color: #888; /* Set a grey color */
+        }
+
+        #question-text {
+            margin-top: -5px;
+            font-size: 20px; /* Set a larger font size for the question text */
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     
-        
+   
     <div class="top-panel">
         <div class="left-panel">
             <label for="subjectSelect">Enter a subject code:</label>
@@ -152,13 +178,50 @@
         </div>
     </div>
 
+    <div id="question-container-parent" display="none">
+    <div class="question-container">
+        <div class="best-prof-chart-container">
+            <canvas id="best-prof-pie-chart"></canvas>
+        </div>
+        <div class="text-container">
+            <p class="small-text">Course Evaluation responses:</p>
+            <h3 id="question-text">Question goes here</h3>
+            <h4 id="best-professor"><span id="best-professor-name"></span> performed the best</h4>
+            <div class="question-navigation">
+                <button id="prev-question">Previous</button>
+                <button id "next-question">Next</button>
+            </div>
+        </div>
+    </div>   
+    </div> 
+
     <script>
+
+        const fetchPromises = [];
+
+        //chart object
+        pieChart = null;
 
         courseData = {};
         currentSubjectCode = "";
         currentCourseCode = "";
         professorsData = {};
+
         courseEvalResponses = [];
+        courseEvalOptions = [[ "No, I did not understand what was expected of me", "I partially understood what was expected of me", "Yes, I understood what was expected of me"],
+                                ["This course did not help me learn the concepts or skills", "This course only slightly helped me learn the concepts or skills", "This course only moderately helped me learn the concepts or skills", "This course definitely helped me learn the concepts or skills"], 
+                                ["Never", "Seldom", "Often", "Frequently"], 
+                                ["Not at all organized", "Slightly organized", "Moderately organized", "Very well organized"], 
+                                ["Not applicable", "Strongly disagree", "Disagree", "Neither", "Agree", "Strongly agree"],
+                                ["No feedback was provided", "Feedback provided was not at all helpful", "Feedback provided was only slightly helpful", "Feedback provided was moderately helpful", "Feedback provided was very helpful", "Feedback provided was extremely helpful"] ];
+        courseEvalQuestions = ["I understood what was expected of me", "This course helped me learn concepts or skills as stated in course objectives/outcomes", "In this course, I engaged in critical thinking and/or problem solving", "Please rate the organization of this course", "In this course, I learned to critically evaluate diverse ideas and perspectives", "Feedback in this course helped me learn"]
+        currentQuestionIndex = 0;
+
+        const questionTextElement = document.getElementById('question-text');
+        const pieChartCanvas = document.getElementById('best-prof-pie-chart');
+        const prevQuestionButton = document.getElementById('prev-question');
+        const nextQuestionButton = document.getElementById('next-question');
+        const bestProfessorNameElement = document.getElementById('best-professor-name');
         
         // Fetch JSON data and populate the subject codes dropdown
         fetch('http://127.0.0.1:8000/get_subject_codes')
@@ -368,15 +431,13 @@ function createProfessorCard(professorName, gpa, gradeBreakdown) {
                 // If the checkbox is checked, create a card
                 createProfessorCard(professorName, gpa, grade_dist);
 
+                fetchPromises.push(
                 fetch(`http://127.0.0.1:8000/get_evals/${currentSubjectCode.toUpperCase()}/${currentCourseCode.replace(' ', '+')}/${professorName}`)
                 .then(response => response.json())
                 .then(data => {
-
-                    console.log(data);
                     courseEvalResponses.push(data);
-
-                    console.log(courseEvalResponses);
-                });
+                })
+                );
                 
             } else {
                 // If the checkbox is unchecked, remove the corresponding card
@@ -394,8 +455,108 @@ function createProfessorCard(professorName, gpa, gradeBreakdown) {
                 });
             }
             highlightHighestGpaCard(); 
+            Promise.all(fetchPromises).then(() => {
+
+                updateEvaluationChart();
+            });
         }
     });
+
+
+    function updateEvaluationChart() {
+        const questionContainerParent = document.getElementById('question-container-parent');
+            if (courseEvalResponses.length === 0){
+                questionContainerParent.style.display = 'none';
+            }else{
+                questionContainerParent.style.display = 'block';
+            }
+
+            //get the current question
+            const currentQuestion = courseEvalQuestions[currentQuestionIndex];
+            console.log("course eval", courseEvalResponses);
+
+            console.log("First professor:", courseEvalResponses[0]);
+            console.log("Question scores for the first professor:", courseEvalResponses[0].question_scores);
+            console.log("Current question index:", currentQuestionIndex);
+            //find the professor that performed the best at the question
+            let bestProfessor = courseEvalResponses[0];
+            let bestProfessorScore = courseEvalResponses[0].question_scores[currentQuestionIndex];
+            let worstProfessor = courseEvalResponses[0];
+            let worstProfessorScore = courseEvalResponses[0].question_scores[currentQuestionIndex];
+
+            courseEvalResponses.forEach(professor => {
+                if (professor.question_scores[currentQuestionIndex] > bestProfessorScore){
+                    bestProfessor = professor;
+                    bestProfessorScore = professor.question_scores[currentQuestionIndex];
+                }
+                if (professor.question_scores[currentQuestionIndex] < worstProfessorScore){
+                    worstProfessor = professor;
+                    worstProfessorScore = professor.question_scores[currentQuestionIndex];
+                }
+            });
+
+            const bestProfessorName = bestProfessor.name;
+            const worstProfessorName = worstProfessor.name;
+
+            const bestProfessorScores = bestProfessor.eval_answers[currentQuestionIndex];
+            const worstProfessorScores = worstProfessor.eval_answers[currentQuestionIndex];
+
+            questionTextElement.textContent = currentQuestion;
+
+            console.log("bprofscores", bestProfessorScores);
+
+            //update best professor text
+            setBestProfessorName(bestProfessorName);
+
+            // Create and render a pie chart
+            if (pieChart !== null){
+                pieChart.destroy();
+            }
+            let pieChartLabels = [];
+            courseEvalOptions[currentQuestionIndex].forEach(i => {
+                pieChartLabels.unshift(i); 
+            });
+            let pieChartScores = [];
+            bestProfessorScores.forEach(i => {
+                pieChartScores.unshift(i);
+            });
+            console.log("pieScores", pieChartScores);
+            pieChart = new Chart(pieChartCanvas, {
+                type: 'pie',
+                data: {
+                    labels: pieChartLabels,
+                    datasets: [{
+                        data: pieChartScores,
+                        backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        ],
+                    }],
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+    
+                        }
+                    }
+                },
+        
+                maintainAspectRatio: false, // Set to false to disable aspect ratio
+                responsive: true, // Enable responsiveness
+            });
+        }
+
+        function setBestProfessorName(name) {
+            bestProfessorNameElement.textContent = name;
+            bestProfessorNameElement.style.fontWeight = 'bold'; // Make the name bold
+        }
+
+
+
     </script>
 </body>
 </html>
