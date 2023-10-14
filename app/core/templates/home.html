@@ -124,6 +124,11 @@
             align-items: left; /* Align content to the left */
             width: 100%;
             margin-top: 20px;
+            flex: 1;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
         }
 
         .best-prof-chart-container {
@@ -138,12 +143,41 @@
         .small-text {
             font-size: 14px; /* Set a smaller font size */
             color: #888; /* Set a grey color */
+            font-family: Arial, sans-serif;
         }
 
         #question-text {
             margin-top: -5px;
             font-size: 20px; /* Set a larger font size for the question text */
+            font-family: Arial, sans-serif;
         }
+
+        .worst-prof-container {
+            display: flex;
+    flex-direction: row; /* Set to 'row' to make elements appear side by side */
+    margin-top: 20px;
+        }
+
+        .worst-prof-chart-container {
+            flex: 1;
+            max-width: 33%;
+        }
+
+        .worst-prof-text-container {
+            flex: 2;
+            text-align: right; 
+        }
+
+        #worst-professor-name {
+            font-weight: bold; /* Make the worst professor name bold */
+        }
+
+        .worst-prof-text {
+    flex: 1;
+    text-align: right;
+    margin-right: 20px; /* Add margin between the text and chart */
+    font-size: 15px;
+}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -178,22 +212,34 @@
         </div>
     </div>
 
-    <div id="question-container-parent" display="none">
-    <div class="question-container">
-        <div class="best-prof-chart-container">
-            <canvas id="best-prof-pie-chart"></canvas>
-        </div>
-        <div class="text-container">
-            <p class="small-text">Course Evaluation responses:</p>
-            <h3 id="question-text">Question goes here</h3>
-            <h4 id="best-professor"><span id="best-professor-name"></span> performed the best</h4>
-            <div class="question-navigation">
-                <button id="prev-question">Previous</button>
-                <button id "next-question">Next</button>
+    <div id="question-container-parent" style="display: none; width: 100%">
+        <div class="question-container">
+            <div class="best-prof-chart-container">
+                <canvas id="best-prof-pie-chart"></canvas>
+            </div>
+            <div class="text-container">
+                <p class="small-text">Course Evaluation responses:</p>
+                <h3 id="question-text">Question goes here</h3>
+                <h4 id="best-professor"><span id="best-professor-name"></span> performed the best</h4>
+                <div class="question-navigation">
+                    <button id="prev-question">Previous</button>
+                    <button id="next-question">Next</button>
+                </div>
+                <div id="worst-prof-container-parent">
+                <div id="worst-prof-container" class="worst-prof-container">
+                    <div class="worst-prof-text">
+                        <h4 id="worst-professor"><span id="worst-professor-name"></span> performed the worst</h4>
+                    </div>
+                    <div class="worst-prof-chart-container">
+                        <canvas id="worst-prof-pie-chart"></canvas>
+                    </div>
+                    
+                </div>
+                </div>
             </div>
         </div>
-    </div>   
-    </div> 
+    </div>
+    
 
     <script>
 
@@ -201,6 +247,7 @@
 
         //chart object
         pieChart = null;
+        worstPieChart = null;
 
         courseData = {};
         currentSubjectCode = "";
@@ -219,9 +266,32 @@
 
         const questionTextElement = document.getElementById('question-text');
         const pieChartCanvas = document.getElementById('best-prof-pie-chart');
+        const worstProfChartCanvas = document.getElementById('worst-prof-pie-chart');
         const prevQuestionButton = document.getElementById('prev-question');
         const nextQuestionButton = document.getElementById('next-question');
         const bestProfessorNameElement = document.getElementById('best-professor-name');
+        const worstProfessorNameElement = document.getElementById('worst-professor-name');
+
+        nextQuestionButton.addEventListener('click', () => {
+            if (currentQuestionIndex === courseEvalQuestions.length - 1){
+                currentQuestionIndex = 0;
+            }else{
+                currentQuestionIndex += 1;
+            }
+
+            updateEvaluationChart();
+    
+        });
+
+        prevQuestionButton.addEventListener('click', () => {
+            if (currentQuestionIndex === 0){
+                currentQuestionIndex = courseEvalQuestions.length - 1;
+            }else{
+                currentQuestionIndex -= 1;
+            }
+
+            updateEvaluationChart();
+        });
         
         // Fetch JSON data and populate the subject codes dropdown
         fetch('http://127.0.0.1:8000/get_subject_codes')
@@ -465,10 +535,17 @@ function createProfessorCard(professorName, gpa, gradeBreakdown) {
 
     function updateEvaluationChart() {
         const questionContainerParent = document.getElementById('question-container-parent');
+        const worstContainer = document.getElementById('worst-prof-container-parent');
             if (courseEvalResponses.length === 0){
                 questionContainerParent.style.display = 'none';
             }else{
                 questionContainerParent.style.display = 'block';
+            }
+
+            if (courseEvalResponses.length === 1 || courseEvalResponses.length === 0){
+                worstContainer.style.display = 'none';
+            }else{
+                worstContainer.style.display = 'block'; 
             }
 
             //get the current question
@@ -517,10 +594,16 @@ function createProfessorCard(professorName, gpa, gradeBreakdown) {
                 pieChartLabels.unshift(i); 
             });
             let pieChartScores = [];
+            let worstChartScores = [];
             bestProfessorScores.forEach(i => {
                 pieChartScores.unshift(i);
             });
-            console.log("pieScores", pieChartScores);
+            worstProfessorScores.forEach(i => {
+                worstChartScores.unshift(i);
+            });
+
+            console.log("worst scares", worstChartScores);
+            
             pieChart = new Chart(pieChartCanvas, {
                 type: 'pie',
                 data: {
@@ -534,6 +617,13 @@ function createProfessorCard(professorName, gpa, gradeBreakdown) {
                         'rgba(255, 205, 86, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
                         ],
+                        borderColor: [
+                    'rgba(75, 192, 192, .4)',
+                    'rgba(255, 99, 132, .4)',
+                    'rgba(255, 159, 64, .4)',
+                    'rgba(255, 205, 86, .4)',
+                    'rgba(54, 162, 235, .4)',
+                ],
                     }],
                 },
                 options: {
@@ -548,11 +638,59 @@ function createProfessorCard(professorName, gpa, gradeBreakdown) {
                 maintainAspectRatio: false, // Set to false to disable aspect ratio
                 responsive: true, // Enable responsiveness
             });
+
+            if (worstPieChart !== null){
+                worstPieChart.destroy();
+            }
+
+            setWorstProfessorName(worstProfessorName);
+
+            worstPieChart = new Chart(worstProfChartCanvas, {
+                type: 'pie',
+                data: {
+                    labels: pieChartLabels,
+                    datasets: [{
+                        data: worstChartScores,
+                        backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        ],
+                        borderColor: [
+                    'rgba(75, 192, 192, .4)',
+                    'rgba(255, 99, 132, .4)',
+                    'rgba(255, 159, 64, .4)',
+                    'rgba(255, 205, 86, .4)',
+                    'rgba(54, 162, 235, .4)',
+                ],
+                    }],
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false,
+    
+                        }
+                    }
+                },
+        
+                maintainAspectRatio: false, // Set to false to disable aspect ratio
+                responsive: true, // Enable responsiveness
+            });
+
+
         }
 
         function setBestProfessorName(name) {
             bestProfessorNameElement.textContent = name;
             bestProfessorNameElement.style.fontWeight = 'bold'; // Make the name bold
+        }
+
+        function setWorstProfessorName(name) {
+            worstProfessorNameElement.textContent = name;
+            worstProfessorNameElement.style.fontWeight = 'bold'; // Make the name bold
         }
 
 
