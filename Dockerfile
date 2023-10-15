@@ -25,7 +25,8 @@ RUN python -m venv /py && \
     mkdir -p /vol/web/media && \
     chown -R app:app /vol && \
     chmod -R 755 /vol && \
-    chmod -R +x /scripts
+    chmod -R +x /scripts \
+    chmod -R 777 /app/core/migrations
 
 ENV PATH="/scripts:/py/bin:$PATH"
 
