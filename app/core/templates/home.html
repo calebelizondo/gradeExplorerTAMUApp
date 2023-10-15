@@ -178,6 +178,21 @@
     margin-right: 20px; /* Add margin between the text and chart */
     font-size: 15px;
 }
+
+.custom-button {
+  background-color: #3498db; /* Button background color */
+  color: #fff; /* Text color */
+  border: none; /* Remove the button border */
+  padding: 10px 20px; /* Padding to create some space inside the button */
+  border-radius: 5px; /* Rounded corners for the button */
+  font-size: 16px; /* Font size */
+  cursor: pointer; /* Change the cursor on hover to indicate it's clickable */
+  text-decoration: none; /* Remove underlines for anchor-style buttons */
+}
+
+.custom-button:hover {
+  background-color: #2980b9; /* Change background color on hover */
+}
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -222,8 +237,8 @@
                 <h3 id="question-text">Question goes here</h3>
                 <h4 id="best-professor"><span id="best-professor-name"></span> performed the best</h4>
                 <div class="question-navigation">
-                    <button id="prev-question">Previous</button>
-                    <button id="next-question">Next</button>
+                    <button id="prev-question" class="custom-button">Previous</button>
+                    <button id="next-question" class="custom-button">Next</button>
                 </div>
                 <div id="worst-prof-container-parent">
                 <div id="worst-prof-container" class="worst-prof-container">
