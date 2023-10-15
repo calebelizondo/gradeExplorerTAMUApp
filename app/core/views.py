@@ -3,7 +3,7 @@ from django.http import JsonResponse
 
 from core.models import Section_grades
 from django.views.decorators.csrf import csrf_exempt
-
+from corsheaders import decorators
 
 
 def home(request):

@@ -58,7 +58,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'app.urls'
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = ["https://thebatt.com", "https://admin-newyork1.bloxcms.com"]
 
 TEMPLATES = [
     {
