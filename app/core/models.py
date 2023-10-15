@@ -1,11 +1,6 @@
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
-class Sample(models.Model):
-    
-    attachment = models.FileField()
-
-
 class Section_grades(models.Model):
     SEMESTER_CHOICES = [
         ('SPRING', 'Spring'),
