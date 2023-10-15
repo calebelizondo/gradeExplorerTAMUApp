@@ -2,6 +2,9 @@ from django.shortcuts import render
 from django.http import JsonResponse
 
 from core.models import Section_grades
+from django.views.decorators.csrf import csrf_exempt
+
+
 
 def home(request):
     return render(request, 'home.html')
@@ -93,6 +96,7 @@ def get_eval_score(responses):
     for i in range(len(responses)):
         score += i * (responses[i] / total_responses)
     return score
+
 
 #returns a professor's evaluation scores given a name, subject code and course number
 def get_evals(request, subject_code, course_code, prof_name):
