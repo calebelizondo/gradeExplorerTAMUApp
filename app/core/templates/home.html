@@ -420,6 +420,8 @@ function highlightHighestGpaCard() {
                 }
 
                 currentCourseCode = typedCourseCode;
+                courseEvalResponses = [];
+                updateEvaluationChart();
 
             })
             .catch(error => console.error('Error fetching data:', error));
