@@ -54,7 +54,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'app.urls'
 
 CORS_ALLOWED_ORIGINS = ["https://thebatt.com", "https://admin-newyork1.bloxcms.com", "http://localhost:3000"]
-WSGI_APPLICATION = 'app.app.wsgi.application'
+WSGI_APPLICATION = 'app.wsgi.application'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

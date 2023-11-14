@@ -3,3 +3,5 @@
 app/core/migrations
 
 frontend/node_modules
+
+app/__pycache__
