@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import dj_database_url
 import os
 from pathlib import Path
 
@@ -20,17 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(os.environ.get('DEBUG', 0)))
+SECRET_KEY = "rshddfdjksejfskhfdfkhrguirhrfvdfjchkjxv"
 
-ALLOWED_HOSTS = []
-ALLOWED_HOSTS.extend(
-    filter(
-        None, 
-        os.environ.get('ALLOWED_HOSTS', '').split(','),
-    )
-)
 
 # Application definition
 
@@ -58,8 +50,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'app.urls'
 
-CORS_ALLOWED_ORIGINS = ["https://thebatt.com", "https://admin-newyork1.bloxcms.com"]
-
+CORS_ALLOWED_ORIGINS = ["https://thebatt.com", "https://admin-newyork1.bloxcms.com", "http://localhost:8000"]
+WSGI_APPLICATION = 'teaApplications.wsgi.application'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -95,7 +87,7 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
-
+DATABASES["default"] = dj_database_url.parse("postgres://gradedashboard_db_user:Ovh0rlDjeWHL0fvSehHR2F72YVyoQjEj@dpg-cl9a7jivokcc73eeo4v0-a.oregon-postgres.render.com/gradedashboard_db")
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
