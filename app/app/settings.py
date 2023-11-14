@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -52,8 +53,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'app.urls'
 
-CORS_ALLOWED_ORIGINS = ["https://thebatt.com", "https://admin-newyork1.bloxcms.com", "http://localhost:8000"]
-WSGI_APPLICATION = 'teaApplications.wsgi.application'
+CORS_ALLOWED_ORIGINS = ["https://thebatt.com", "https://admin-newyork1.bloxcms.com", "http://localhost:3000"]
+WSGI_APPLICATION = 'app.app.wsgi.application'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
