@@ -313,7 +313,7 @@
         });
         
         // Fetch JSON data and populate the subject codes dropdown
-        fetch('http://localhost:8000/get_subject_codes')
+        fetch('https://gradedashboardtamu.onrender.com/get_subject_codes')
             .then(response => response.json())
             .then(data => {
                 subjects = data;
@@ -335,7 +335,7 @@
             if (subjects.includes(typedSubjectCode)){
 
                 try {
-                    fetch(`http://localhost:8000/get_course_codes/${typedSubjectCode}`)
+                    fetch(`https://gradedashboardtamu.onrender.com/get_course_codes/${typedSubjectCode}`)
                         .then(response => response.json())
                         .then(data => {
 
@@ -422,7 +422,7 @@ function highlightHighestGpaCard() {
             const typedSubjectCode = document.getElementById('subjectSelect').value;
             const typedCourseCode = document.getElementById('courseSelect').value;
             if (subjects.includes(typedSubjectCode) && course_codes.includes(typedCourseCode)){
-                fetch(`http://localhost:8000/get_grades/${typedSubjectCode.toUpperCase()}/${typedCourseCode}`)
+                fetch(`https://gradedashboardtamu.onrender.com/get_grades/${typedSubjectCode.toUpperCase()}/${typedCourseCode}`)
                 .then(response => response.json())
                 .then(data => {
 
@@ -532,7 +532,7 @@ function createProfessorCard(professorName, gpa, gradeBreakdown) {
                 createProfessorCard(professorName, gpa, grade_dist);
 
                 fetchPromises.push(
-                fetch(`http://localhost:8000/get_evals/${currentSubjectCode.toUpperCase()}/${currentCourseCode.replace(' ', '+')}/${professorName}`)
+                fetch(`https://gradedashboardtamu.onrender.com/get_evals/${currentSubjectCode.toUpperCase()}/${currentCourseCode.replace(' ', '+')}/${professorName}`)
                 .then(response => response.json())
                 .then(data => {
                     courseEvalResponses.push(data);
