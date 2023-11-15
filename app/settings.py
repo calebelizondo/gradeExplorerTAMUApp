@@ -53,7 +53,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'app.urls'
 
-CORS_ALLOWED_ORIGINS = ["https://thebatt.com", "https://admin-newyork1.bloxcms.com", "http://localhost:3000"]
 CORS_ALLOW_ALL_ORIGINS = True
 WSGI_APPLICATION = 'app.wsgi.application'
 TEMPLATES = [
