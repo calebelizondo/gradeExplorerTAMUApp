@@ -265,6 +265,10 @@
         worstPieChart = null;
 
         courseData = {};
+        subjects = [];
+        course_codes = [];
+
+
         currentSubjectCode = "";
         currentCourseCode = "";
         professorsData = {};
@@ -309,16 +313,16 @@
         });
         
         // Fetch JSON data and populate the subject codes dropdown
-        fetch('https://gradedashboardtamu.onrender.com/get_subject_codes')
+        fetch('http://localhost:8000/get_subject_codes')
             .then(response => response.json())
             .then(data => {
-        
-                courseData = data;
+                subjects = data;
+
                 const subjectSelect = document.getElementById('subjects');
                 data.forEach(subject => {
                     const option = document.createElement('option');
-                    option.value = subject['subject_code'];
-                    option.textContent = subject['subject_code'];
+                    option.value = subject;
+                    option.textContent = subject;
                     subjectSelect.appendChild(option);
                 });
             })
@@ -328,25 +332,34 @@
         document.getElementById('subjectSelect').addEventListener('input', () => {
             const typedSubjectCode = document.getElementById('subjectSelect').value;
 
-            try {
-                course_codes = courseData.filter(item => item.subject_code === typedSubjectCode.toUpperCase())[0].course_numbers;
+            if (subjects.includes(typedSubjectCode)){
 
-                const courseNumbersDatalist = document.getElementById('courseNumbers');
-                // Clear existing options in the datalist
-                courseNumbersDatalist.innerHTML = '';
+                try {
+                    fetch(`http://localhost:8000/get_course_codes/${typedSubjectCode}`)
+                        .then(response => response.json())
+                        .then(data => {
 
-                course_codes.forEach(courseCode => {
-                    const option = document.createElement('option');
-                    option.value = courseCode;
-                    option.textContent = courseCode;
-                    courseNumbersDatalist.appendChild(option);
-                });
+                            const courseNumbersDatalist = document.getElementById('courseNumbers');
+                            // Clear existing options in the datalist
+                            courseNumbersDatalist.innerHTML = '';
+                            course_codes = data;
 
-                currentSubjectCode = typedSubjectCode;
-                
+                            data.forEach(courseCode => {
+                                const option = document.createElement('option');
+                                option.value = courseCode;
+                                option.textContent = courseCode;
+                                courseNumbersDatalist.appendChild(option);
+                            });
 
-            }catch(err){
-                console.log("subject not found");
+                            currentSubjectCode = typedSubjectCode;
+                            
+                        })
+                        .catch(error => console.error('Error fetching data:', error));
+                    
+
+                }catch(err){
+                    console.log("subject not found");
+                }
             }
         });
 
@@ -408,8 +421,8 @@ function highlightHighestGpaCard() {
         document.getElementById('courseSelect').addEventListener('input', () => {
             const typedSubjectCode = document.getElementById('subjectSelect').value;
             const typedCourseCode = document.getElementById('courseSelect').value;
-            if ((courseData.filter(item => item.subject_code === typedSubjectCode.toUpperCase() && item.course_numbers.includes(typedCourseCode))).length !== 0){
-                fetch(`https://gradedashboardtamu.onrender.com/get_grades/${typedSubjectCode.toUpperCase()}/${typedCourseCode}`)
+            if (subjects.includes(typedSubjectCode) && course_codes.includes(typedCourseCode)){
+                fetch(`http://localhost:8000/get_grades/${typedSubjectCode.toUpperCase()}/${typedCourseCode}`)
                 .then(response => response.json())
                 .then(data => {
 
@@ -519,7 +532,7 @@ function createProfessorCard(professorName, gpa, gradeBreakdown) {
                 createProfessorCard(professorName, gpa, grade_dist);
 
                 fetchPromises.push(
-                fetch(`https://gradedashboardtamu.onrender.com/get_evals/${currentSubjectCode.toUpperCase()}/${currentCourseCode.replace(' ', '+')}/${professorName}`)
+                fetch(`http://localhost:8000/get_evals/${currentSubjectCode.toUpperCase()}/${currentCourseCode.replace(' ', '+')}/${professorName}`)
                 .then(response => response.json())
                 .then(data => {
                     courseEvalResponses.push(data);
@@ -567,11 +580,7 @@ function createProfessorCard(professorName, gpa, gradeBreakdown) {
 
             //get the current question
             const currentQuestion = courseEvalQuestions[currentQuestionIndex];
-            console.log("course eval", courseEvalResponses);
 
-            console.log("First professor:", courseEvalResponses[0]);
-            console.log("Question scores for the first professor:", courseEvalResponses[0].question_scores);
-            console.log("Current question index:", currentQuestionIndex);
             //find the professor that performed the best at the question
             let bestProfessor = courseEvalResponses[0];
             let bestProfessorScore = courseEvalResponses[0].question_scores[currentQuestionIndex];
@@ -597,7 +606,6 @@ function createProfessorCard(professorName, gpa, gradeBreakdown) {
 
             questionTextElement.textContent = currentQuestion;
 
-            console.log("bprofscores", bestProfessorScores);
 
             //update best professor text
             setBestProfessorName(bestProfessorName);
@@ -619,7 +627,6 @@ function createProfessorCard(professorName, gpa, gradeBreakdown) {
                 worstChartScores.unshift(i);
             });
 
-            console.log("worst scares", worstChartScores);
             
             pieChart = new Chart(pieChartCanvas, {
                 type: 'pie',
