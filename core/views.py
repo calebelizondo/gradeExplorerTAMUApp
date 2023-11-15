@@ -63,8 +63,12 @@ def get_grades(request, subject_code, course_code):
 
 def get_subject_codes(request):
 
+    rep = {
+        'subject_codes': Section_grades.objects.values('subject_code').distinct()
+    }
+
     # Convert the subject_data list to JSON
-    return JsonResponse(Section_grades.objects.values('subject_code').distinct(), safe=False)
+    return JsonResponse(rep, safe=False)
 
 #given list of answers, calculate score
 def get_eval_score(responses):
