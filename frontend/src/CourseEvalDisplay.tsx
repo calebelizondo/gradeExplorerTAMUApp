@@ -28,22 +28,79 @@ const Questions: Question[] = questions_t.map((question, i) => new Question(ques
 const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ( {instructors} ) => {
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [bestInstructor, setBestInstructor] = useState<Instructor | null>(null);
+    const [worstInstructor, setWorstInstructor] = useState<Instructor | null>(null);
     const currentQuestion = Questions[currentQuestionIndex];
 
-    
-    useEffect(() => {   
-        if (instructors) {
-            instructors.forEach((instructor: Instructor) => {
-            
-            })
+    console.log(instructors);
+
+    // handles switching questions
+    function nextQuestion() {
+        if (currentQuestionIndex === Questions.length - 1) {
+            setCurrentQuestionIndex(0);
+            return;
+        } else {
+            setCurrentQuestionIndex(currentQuestionIndex + 1);
         }
-    }, [instructors]);
+    }
+
+    function previousQuestion() {  
+        if (currentQuestionIndex === 0) {  
+            setCurrentQuestionIndex(Questions.length - 1);
+            return;
+        } else {
+            setCurrentQuestionIndex(currentQuestionIndex - 1);
+        }
+    }
+    
+    useEffect(() => {
+        if (instructors != null){
+
+            // store current best and worst instructors in temp variables to avoid triggering re-render
+            var tempBestInstructor: Instructor = instructors?.[0];
+            var tempWorstInstructor: Instructor = instructors?.[0];
+
+            instructors.forEach((instructor) => {
+                if (computeWeightedAverage(instructor) >= computeWeightedAverage(tempBestInstructor!)) {
+                    tempBestInstructor = instructor;
+                }
+                else if (computeWeightedAverage(instructor) < computeWeightedAverage(tempWorstInstructor!)) {
+                    tempWorstInstructor = instructor;
+                }
+            });
+
+            console.log('best instructor: ' + bestInstructor?.name);
+            console.log('worst instructor: ' + worstInstructor?.name);
+
+            setBestInstructor(tempBestInstructor);
+            setWorstInstructor(tempWorstInstructor);
+        }
+    }, [ currentQuestionIndex, instructors ]);
+
+    // compute weighted average of responses
+    function computeWeightedAverage(instructor: Instructor) {
+        var sum = 0;
+        var total = 0;
+        instructor.evalResponses?.forEach((response) => {
+            sum += response[currentQuestionIndex] * (response[currentQuestionIndex] - 1);
+            total += response[currentQuestionIndex];
+        });
+        return sum/total;
+    }
 
 
     // handles switching questions
     return (
+
         <div>
-            <h1> Course eval display </h1>
+            <h1>Course Evaluation responses</h1>
+            <div>
+                <h2> { currentQuestion.question } </h2>
+                <button onClick={() => previousQuestion()}>prev</button>
+                <button onClick={() => nextQuestion()}>next</button>
+                <p>Best Instructor: {bestInstructor?.name}</p>
+                <p>Worst Instructor: {worstInstructor?.name} </p>
+            </div>
         </div>
     );
 };

@@ -4,4 +4,4 @@ app/core/migrations
 
 frontend/node_modules
 
-app/__pycache__
+**/__pycache__/*

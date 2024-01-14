@@ -57,10 +57,8 @@ const Dashboard = () => {
         .then(response => response.json())
         .then(data => {
           const formattedInstructors: Instructor[] = data.map((instructorData: any) => {
-            // Extract data and create Instructor objects
-            const { professor, average_gpa, grade_distribution } = instructorData;
             // Create new Instructor object and push to the list
-            return new Instructor(professor, average_gpa, grade_distribution);
+            return new Instructor(instructorData.professor, instructorData.average_gpa, instructorData.grade_distribution);
           });
 
           // Update state with formatted instructors

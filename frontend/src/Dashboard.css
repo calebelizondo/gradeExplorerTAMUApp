@@ -3,6 +3,7 @@
     flex-direction: row;
     align-content: center;
     align-items: center;
+    width: 100%;
 }
 
 select {
@@ -22,6 +23,7 @@ label {
     flex-direction: column;
     align-content: left;
     align-items: left;
+    padding: 40px;
 }
 
 .instructor-selection-container {
@@ -32,6 +34,7 @@ label {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     overflow-y: auto; 
     height: 200px; 
+    min-width: 70%;
 }
 
 .instructor-selection-container > ul {
@@ -40,28 +43,36 @@ label {
     border-bottom: 1px solid #ccc;
 }
 
-
 .grade-dists-container {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     width: 100%;
-    height: 250px;
-    padding: 10px;
+    height: 300px;
+    padding: 20px;
     overflow-x: auto; /* Enable horizontal scrolling */
     white-space: nowrap; /* Prevent cards from wrapping to a new row */
+    align-content: center;
 }
 
-.professor-cards { /* Align cards to the start of the container */
-    height: 100%;
-}
 
 .professor-card {
     width: 200px; /* Set a fixed width for each card */
-    height: 100%;
+    height: 90%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     margin: 5px;
     text-align: center;
+    align-items: center;
+    align-content: center;
+}
+
+
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    padding: 10px;
 }
