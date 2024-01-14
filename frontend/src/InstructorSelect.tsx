@@ -4,9 +4,10 @@ interface InstructorSelectorProps {
     instructors: Instructor[] | null;
     addInstructor: (instructor: Instructor) => void;
     removeInstructor: (instructor: Instructor) => void;
+    loading: boolean;
 };
 
-const InstructorSelect:React.FC<InstructorSelectorProps> = ({ instructors, addInstructor, removeInstructor }) => {
+const InstructorSelect:React.FC<InstructorSelectorProps> = ({ instructors, addInstructor, removeInstructor, loading }) => {
     
     //handles check and uncheck of instructor
     const instructorCheckHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,16 +27,20 @@ const InstructorSelect:React.FC<InstructorSelectorProps> = ({ instructors, addIn
 
     return (
         <div className="instructor-selection-container">
-            <ul className="instructor-select-list">
-                {instructors?.map((instructor: Instructor) => (
-                    <li key={instructor.name}>
-                        <label>
-                            <input type="checkbox" onChange={instructorCheckHandler} />
-                            {instructor.name}
-                        </label>
-                    </li>
-                ))}
-            </ul>
+            {loading ? (
+                <div className="loading-animation">Loading...</div>
+            ) : (
+                <ul className="instructor-select-list">
+                    {instructors?.map((instructor: Instructor) => (
+                        <li key={instructor.name}>
+                            <label>
+                                <input type="checkbox" onChange={instructorCheckHandler} />
+                                {instructor.name}
+                            </label>
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 };

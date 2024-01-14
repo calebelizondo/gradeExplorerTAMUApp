@@ -43,10 +43,16 @@ const Dashboard = () => {
   const [instructors, setInstructors] = useState<Instructor[] | null>(null);
   // The instructors selected by the user
   const [selectedInstructors, setSelectedInstructors] = useState<Instructor[] | null>(null);
+  // The instructors are being fetched
+  const [isFetching, setIsFetching] = useState(false);
 
   //Fetch the instructors for the selected course
   useEffect(() => {
     if (selectedCourse != null) {
+
+      // activate loading animation in selector list
+      setIsFetching(true);
+
       fetch(`https://gradedashboardtamu.onrender.com/get_grades/${selectedCourse?.subjectCode}/${selectedCourse?.courseNumber}`)
         .then(response => response.json())
         .then(data => {
@@ -59,6 +65,7 @@ const Dashboard = () => {
 
           // Update state with formatted instructors
           setInstructors(formattedInstructors);
+          setIsFetching(false);
         })
         .catch(error => console.error('Error fetching instructors:', error));
     }else { // If no course is selected, clear the instructors
@@ -98,7 +105,7 @@ const Dashboard = () => {
         <div className='dashboard-container'>
           <div className='input-container'>
             <CourseSelect onCourseChange={setSelectedCourse} />
-            <InstructorSelect instructors={instructors} addInstructor={addInstructor} removeInstructor={removeInstructor}/>
+            <InstructorSelect instructors={instructors} addInstructor={addInstructor} removeInstructor={removeInstructor} loading={isFetching}  />
           </div>
           <GradeDistDisplay instructors={selectedInstructors} />
           <CourseEvalDisplay instructors={selectedInstructors} />

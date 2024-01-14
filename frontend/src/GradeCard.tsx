@@ -10,7 +10,6 @@ const GradeCard: React.FC<GradeCardProps> = ({ instructor }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null); // Ref for the canvas element
     const chartInstance = useRef<Chart<"bar"> | null>(null);
 
-    console.log(instructor.gradeDistribution.a);
     // Create the Chart.js instance for instructor grade distribution when the component mounts
     useEffect(() => {
         if (chartRef.current && instructor) {
