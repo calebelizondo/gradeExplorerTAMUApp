@@ -1,4 +1,6 @@
+import { render } from "@testing-library/react";
 import { Instructor } from "./Dashboard";
+import { Chart } from "chart.js";
 import { useState, useEffect } from "react";
 
 interface CourseEvalDisplayProps {
@@ -28,13 +30,10 @@ const Questions: Question[] = questions_t.map((question, i) => new Question(ques
 const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ( {instructors} ) => {
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const currentQuestion = Questions[currentQuestionIndex];
     const [bestInstructor, setBestInstructor] = useState<Instructor | null>(null);
     const [worstInstructor, setWorstInstructor] = useState<Instructor | null>(null);
-    const currentQuestion = Questions[currentQuestionIndex];
 
-    console.log(instructors);
-
-    // handles switching questions
     function nextQuestion() {
         if (currentQuestionIndex === Questions.length - 1) {
             setCurrentQuestionIndex(0);
@@ -52,8 +51,17 @@ const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ( {instructors} ) =>
             setCurrentQuestionIndex(currentQuestionIndex - 1);
         }
     }
-    
+
     useEffect(() => {
+        // Render charts after the initial render
+        renderCharts();
+    }, [bestInstructor, worstInstructor]);
+
+    
+    useEffect(() => { 
+
+        console.log("instructors", instructors);
+
         if (instructors != null){
 
             // store current best and worst instructors in temp variables to avoid triggering re-render
@@ -68,10 +76,8 @@ const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ( {instructors} ) =>
                     tempWorstInstructor = instructor;
                 }
             });
-
-            console.log('best instructor: ' + bestInstructor?.name);
-            console.log('worst instructor: ' + worstInstructor?.name);
-
+            
+            // set best and worst instructors
             setBestInstructor(tempBestInstructor);
             setWorstInstructor(tempWorstInstructor);
         }
@@ -81,15 +87,60 @@ const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ( {instructors} ) =>
     function computeWeightedAverage(instructor: Instructor) {
         var sum = 0;
         var total = 0;
-        instructor.evalResponses?.forEach((response) => {
-            sum += response[currentQuestionIndex] * (response[currentQuestionIndex] - 1);
-            total += response[currentQuestionIndex];
+
+        var response_index = 0;
+
+        // sum up weighted responses
+        instructor.evalResponses?.[currentQuestionIndex]?.forEach(response => {
+            sum += response * response_index; //higher index correlates to a more positive response
+            total += response;
+            response_index++;
         });
         return sum/total;
     }
 
+    // render pie charts or clear if necassary
+    function renderCharts() {
+        if (bestInstructor && worstInstructor){
+            renderPieChart('best-instructor-chart', bestInstructor);
+            renderPieChart('worst-instructor-chart', worstInstructor);
+        }
+    }
 
-    // handles switching questions
+    function renderPieChart(id: string, instructor: Instructor) {
+        const responses = instructor.evalResponses?.[currentQuestionIndex];
+
+        if (!responses) return;
+
+        const data = {
+            labels: currentQuestion.answer_choices,
+            datasets: [{
+                data: responses, 
+                backgroundColor: [
+                    'red',
+                    'orange',
+                    'yellow',
+                    'green',
+                    'blue',
+                    'purple'
+                ], 
+            }]
+        };
+        
+        const options = {
+            reponsive: true, 
+            maintainAspectRatio: false
+        };
+
+        const ctx = document.getElementById(id) as HTMLCanvasElement;
+        
+        if (ctx) {
+            Chart.getChart(id)?.destroy();
+            new Chart(ctx, {type: 'pie', data, options});
+        }
+
+    }
+
     return (
 
         <div>
@@ -98,8 +149,12 @@ const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ( {instructors} ) =>
                 <h2> { currentQuestion.question } </h2>
                 <button onClick={() => previousQuestion()}>prev</button>
                 <button onClick={() => nextQuestion()}>next</button>
-                <p>Best Instructor: {bestInstructor?.name}</p>
-                <p>Worst Instructor: {worstInstructor?.name} </p>
+                <div>
+                    <p>Best Instructor: {bestInstructor?.name}</p>
+                    <div id="best-instructor-chart"></div>
+                    <p>Worst Instructor: {worstInstructor?.name}</p>
+                    <div id="worst-instructor-chart"></div>
+                </div>
             </div>
         </div>
     );
