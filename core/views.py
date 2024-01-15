@@ -4,10 +4,6 @@ from django.http import JsonResponse
 from core.models import Section_grades
 from django.views.decorators.csrf import csrf_exempt
 
-
-def home(request):
-    return render(request, 'home.html')
-
 grading_system = {'a': 4.0, 'b': 3.0, 'c': 2.0, 'd': 1.0, 'f': 0.0}
 
 def calculate_gpa(grade_counts):

@@ -2,8 +2,6 @@ from django.contrib import admin
 from django.urls import path
 from core import views  
 urlpatterns = [
-    #home
-    path('', views.home, name='home'), 
     #get all subject codes
     path('get_subject_codes/', views.get_subject_codes, name='get_subject_codes'),
     #get grades for professors given subject and course code

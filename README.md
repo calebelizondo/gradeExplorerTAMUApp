@@ -1,6 +1,8 @@
 ## About the application
 This application provides a convenient dashboard for Texas A&M-College Station students to compare previous grades given by instructors and their course evaluation results. This can be especially useful when registering for classes or during add/drop week. 
 
+This application can be run locally using the run.sh script. The script will create a python virtual environment that will install Django and other dependencies (a full list can be found in requirements.txt). The only dependencies required to run the script are Python and NPM (node package manager). 
+
 ## Tech stack
 Postgresql -> Django -> React
 
