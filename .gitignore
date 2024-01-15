@@ -1,6 +1,6 @@
 /venv
 
-app/core/migrations
+**/migrations/*
 
 frontend/node_modules
 
