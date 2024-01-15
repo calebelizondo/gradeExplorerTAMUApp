@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Check if venv folder exists, if not create one
+if [ ! -d "venv" ]; then
+    echo "Creating virtual environment..."
+    python -m venv venv
+fi
+
 # Run Django
 echo "Starting Django development server..."
 source venv/Scripts/activate
