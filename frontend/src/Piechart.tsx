@@ -1,38 +1,55 @@
-import React from "react";
-import { PieChart, Pie, Cell } from "recharts";
+import React, { useEffect } from "react";
+import { Chart } from "chart.js";
 
 interface PieChartProps {
-  responses: number[] | undefined;
+  data: number[] | undefined;
   labels: string[];
+  id: string;
+  width?: string;
+  height?: string; 
+  hideLegend?: boolean;
 }
 
-const CustomPieChart: React.FC<PieChartProps> = ({ responses, labels }) => {
-  if (!responses || responses.length === 0) {
-    return null;
-  }
+const CustomPieChart: React.FC<PieChartProps> = ({
+  data,
+  labels,
+  id,
+  width = "auto", // Default width if not provided
+  height = "auto", // Default height if not provided
+  hideLegend = false,
+}) => {
+  useEffect(() => {
+    if (data && data.length > 0) {
+      const ctx = document.getElementById(id) as HTMLCanvasElement;
 
-  const data = labels.map((label, index) => ({
-    name: label,
-    value: responses[index],
-  }));
+      const myPieChart = new Chart(ctx, {
+        type: "pie",
+        data: {
+          datasets: [
+            {
+              data: data,
+              backgroundColor: [
+                "rgba(75, 192, 192, 0.8)",
+                "rgba(255, 206, 86, 0.8)",
+                "rgba(54, 162, 235, 0.8)",
+                "rgba(255, 99, 132, 0.8)",
+              ],
+            },
+          ],
+          labels: labels,
+        },
+      });
 
-  const COLORS = ["red", "orange", "yellow", "green", "blue", "purple"];
+      return () => {
+        myPieChart.destroy();
+      };
+    }
+  }, [data, labels]);
 
   return (
-    <PieChart width={400} height={400}>
-      <Pie
-        data={data}
-        cx={200}
-        cy={200}
-        outerRadius={80}
-        fill="#8884d8"
-        dataKey="value"
-      >
-        {data.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-        ))}
-      </Pie>
-    </PieChart>
+    <div>
+      <canvas id={id} width={ width } height={height}></canvas>
+    </div>
   );
 };
 

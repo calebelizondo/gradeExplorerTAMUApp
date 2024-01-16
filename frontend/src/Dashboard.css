@@ -76,3 +76,62 @@ label {
     align-items: center;
     padding: 10px;
 }
+
+.top-panel {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .left-panel, .right-panel {
+    flex: 1;
+    padding: 20px;
+    height: [Specify Height];
+    background-color: [Specify Color];
+  }
+  
+  .right-panel {
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+  }
+
+  
+  .professor-name {
+    font-weight: bold;
+  }
+  
+  /* Navigation Buttons Styles */
+  .nav-buttons {
+    margin-top: 20px;
+  }
+  
+  
+  /* Question Container Styles */
+  .question-container {
+    display: flex;
+    width: 100%;
+    margin-top: 20px;
+    flex: 1;
+    padding: 20px;
+    background-color: [Specify Color];
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  #question-text {
+    margin-top: -10px;
+    font-size: 18px;
+  }
+  
+  .worst-prof-container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+  }
+  
+  /* Button Hover Effect */
+  .custom-button:hover {
+    background-color: [Hover Color];
+  }

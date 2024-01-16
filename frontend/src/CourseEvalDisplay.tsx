@@ -105,21 +105,23 @@ const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ({ instructors }) =>
   return (
     <div>
       <h1>Course Evaluation responses</h1>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div className="question-container">
         <h2>{currentQuestion.question}</h2>
-        <div style={{ display: "flex", justifyContent: "space-between", width: "60%" }}>
-          <div style={{ position: "relative", width: "50%" }}>
-            <CustomPieChart responses={bestInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} />
-            <p style={{ position: "absolute", bottom: 0, right: 0 }}>Best Instructor: {bestInstructor?.name}</p>
-          </div>
-          <div style={{ width: "40%" }}>
-            <CustomPieChart responses={worstInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} />
-            <p>Worst Instructor: {worstInstructor?.name}</p>
-          </div>
+        <div className="best-prof-chart-container">
+          <CustomPieChart data={bestInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="best-instructor-chart" />
+          <p className="small-text">Best Instructor: {bestInstructor?.name}</p>
         </div>
-        <div>
-          <button onClick={previousQuestion}>prev</button>
-          <button onClick={nextQuestion}>next</button>
+        <div className="worst-prof-container">
+          <CustomPieChart data={worstInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="worst-instructor-chart" />
+          <p className="small-text">Worst Instructor: {worstInstructor?.name}</p>
+        </div>
+        <div className="question-navigation">
+          <button className="custom-button" onClick={() => setCurrentQuestionIndex((prev) => (prev === 0 ? Questions.length - 1 : prev - 1))}>
+            Previous
+          </button>
+          <button className="custom-button" onClick={() => setCurrentQuestionIndex((prev) => (prev === Questions.length - 1 ? 0 : prev + 1))}>
+            Next
+          </button>
         </div>
       </div>
     </div>

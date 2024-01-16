@@ -5,3 +5,9 @@
 frontend/node_modules
 
 **/__pycache__/*
+
+**/pychache
+
+****/__pycache__/*
+
+***/management

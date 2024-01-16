@@ -58,6 +58,12 @@ const GradeCard: React.FC<GradeCardProps> = ({ instructor }) => {
                                 beginAtZero: true,
                             },
                         },
+                        plugins: {
+
+                            legend: {
+                                display: false,
+                            }
+                        }
                     },
                 });
             }
@@ -75,7 +81,7 @@ const GradeCard: React.FC<GradeCardProps> = ({ instructor }) => {
     return (
         <div className="professor-card">
             <p>{instructor.name}</p>
-            <canvas ref={chartRef}></canvas>
+            <canvas  width="100%" height="80%" ref={chartRef}></canvas>
             <p>GPA: {Math.round(instructor.GPA * 100) / 100}</p>
         </div>
     );
