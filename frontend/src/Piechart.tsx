@@ -22,6 +22,8 @@ const CustomPieChart: React.FC<PieChartProps> = ({
     if (data && data.length > 0) {
       const ctx = document.getElementById(id) as HTMLCanvasElement;
 
+      const legendDisplay = hideLegend ? false : true;
+
       const myPieChart = new Chart(ctx, {
         type: "pie",
         data: {
@@ -29,14 +31,27 @@ const CustomPieChart: React.FC<PieChartProps> = ({
             {
               data: data,
               backgroundColor: [
-                "rgba(75, 192, 192, 0.8)",
-                "rgba(255, 206, 86, 0.8)",
-                "rgba(54, 162, 235, 0.8)",
-                "rgba(255, 99, 132, 0.8)",
+                "rgba(75, 192, 192, 0.4)",
+                "rgba(255, 206, 86, 0.4)",
+                "rgba(54, 162, 235, 0.4)",
+                "rgba(255, 99, 132, 0.4)",
               ],
+              borderColor: [ 
+                "rgba(75, 192, 192, .8)",
+                "rgba(255, 206, 86, .8)",
+                "rgba(54, 162, 235, .8)",
+                "rgba(255, 99, 132, .8)",
+              ], 
             },
           ],
           labels: labels,
+        },
+        options: {
+          plugins: {
+            legend: {
+              display: legendDisplay,
+            },
+          }
         },
       });
 
@@ -44,11 +59,11 @@ const CustomPieChart: React.FC<PieChartProps> = ({
         myPieChart.destroy();
       };
     }
-  }, [data, labels]);
+  }, [data, labels, hideLegend]);
 
   return (
     <div>
-      <canvas id={id} width={ width } height={height}></canvas>
+      <canvas id={id} width={width} height={height}></canvas>
     </div>
   );
 };

@@ -105,7 +105,9 @@ const Dashboard = () => {
             <InstructorSelect instructors={instructors} addInstructor={addInstructor} removeInstructor={removeInstructor} loading={isFetching}  />
           </div>
           <GradeDistDisplay instructors={selectedInstructors} />
-          <CourseEvalDisplay instructors={selectedInstructors} />
+          <div className='eval-container'>
+            <CourseEvalDisplay instructors={selectedInstructors} />
+          </div>
         </div>
     );
 };

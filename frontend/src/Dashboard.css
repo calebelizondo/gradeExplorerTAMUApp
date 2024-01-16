@@ -7,7 +7,7 @@
 }
 
 select {
-    width: 100%;
+    width: 150%;
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
@@ -23,7 +23,7 @@ label {
     flex-direction: column;
     align-content: left;
     align-items: left;
-    padding: 40px;
+    padding-right: 10%;
 }
 
 .instructor-selection-container {
@@ -87,8 +87,6 @@ label {
   .left-panel, .right-panel {
     flex: 1;
     padding: 20px;
-    height: [Specify Height];
-    background-color: [Specify Color];
   }
   
   .right-panel {
@@ -107,8 +105,6 @@ label {
     margin-top: 20px;
   }
   
-  
-  /* Question Container Styles */
   .question-container {
     display: flex;
     width: 100%;
@@ -119,7 +115,7 @@ label {
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
-  
+
   #question-text {
     margin-top: -10px;
     font-size: 18px;
@@ -131,7 +127,35 @@ label {
     margin-top: 20px;
   }
   
-  /* Button Hover Effect */
   .custom-button:hover {
-    background-color: [Hover Color];
+    background-color: #003791;
   }
+
+  .custom-button {
+    background-color:#335996;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+  }
+
+  .eval-container {
+    align-self: left;
+    width: 100%;
+    min-height: 400px;
+  }
+
+  .question-navigation {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: left;
+    margin-top: 20px;
+  }
+
+.h3 {
+    font-size: small;
+    padding-right: 30px;
+}

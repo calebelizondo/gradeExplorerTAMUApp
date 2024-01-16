@@ -102,26 +102,36 @@ const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ({ instructors }) =>
     return sum / total;
   }
 
+  if (!instructors || instructors.length === 0) {
+    return null; // Don't render anything if there are no instructors
+  }
+
   return (
     <div>
-      <h1>Course Evaluation responses</h1>
-      <div className="question-container">
-        <h2>{currentQuestion.question}</h2>
-        <div className="best-prof-chart-container">
-          <CustomPieChart data={bestInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="best-instructor-chart" />
-          <p className="small-text">Best Instructor: {bestInstructor?.name}</p>
-        </div>
-        <div className="worst-prof-container">
-          <CustomPieChart data={worstInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="worst-instructor-chart" />
-          <p className="small-text">Worst Instructor: {worstInstructor?.name}</p>
-        </div>
+      <div>
+        <h1>Course Evaluation responses: </h1>
         <div className="question-navigation">
+          <h3>{currentQuestion.question}</h3>
           <button className="custom-button" onClick={() => setCurrentQuestionIndex((prev) => (prev === 0 ? Questions.length - 1 : prev - 1))}>
             Previous
           </button>
           <button className="custom-button" onClick={() => setCurrentQuestionIndex((prev) => (prev === Questions.length - 1 ? 0 : prev + 1))}>
             Next
           </button>
+        </div>
+      </div>
+      <div className="question-container">
+        <div>
+          <div className="best-prof-chart-container">
+            <CustomPieChart data={bestInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="best-instructor-chart" width="80vw" />
+            <p className="small-text">Best Instructor: {bestInstructor?.name}</p>
+          </div>
+          {instructors.length > 1 && ( // Render the worst instructor portion only if there is more than one professor
+            <div className="worst-prof-container">
+              <CustomPieChart data={worstInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="worst-instructor-chart" hideLegend={true} />
+              <p className="small-text">Worst Instructor: {worstInstructor?.name}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
