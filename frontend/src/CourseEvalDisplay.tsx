@@ -2,6 +2,7 @@ import React from "react";
 import CustomPieChart from "./Piechart";
 import { Instructor } from "./Dashboard";
 import { useState, useEffect } from "react";
+import "./Dashboard.css";
 
 interface CourseEvalDisplayProps {
   instructors: Instructor[] | null;
@@ -108,31 +109,31 @@ const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ({ instructors }) =>
 
   return (
     <div>
-      <div>
-        <h1>Course Evaluation responses: </h1>
-        <div className="question-navigation">
-          <h3>{currentQuestion.question}</h3>
-          <button className="custom-button" onClick={() => setCurrentQuestionIndex((prev) => (prev === 0 ? Questions.length - 1 : prev - 1))}>
-            Previous
-          </button>
-          <button className="custom-button" onClick={() => setCurrentQuestionIndex((prev) => (prev === Questions.length - 1 ? 0 : prev + 1))}>
-            Next
-          </button>
-        </div>
-      </div>
       <div className="question-container">
+
         <div>
+          <h1>Course Evaluation results: </h1>
+          <div className="question-navigation">
+            <h3>{'"' + currentQuestion.question + '"'}</h3>
+            <button className="custom-button" onClick={() => setCurrentQuestionIndex((prev) => (prev === 0 ? Questions.length - 1 : prev - 1))}>
+              Previous
+            </button>
+            <button className="custom-button" onClick={() => setCurrentQuestionIndex((prev) => (prev === Questions.length - 1 ? 0 : prev + 1))}>
+              Next
+            </button>
+          </div>
+
           <div className="best-prof-chart-container">
             <CustomPieChart data={bestInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="best-instructor-chart" width="80vw" />
-            <p className="small-text">Best Instructor: {bestInstructor?.name}</p>
+            <p className="small-text"><b>{bestInstructor?.name}</b> performed the best</p>
           </div>
+        </div>
           {instructors.length > 1 && ( // Render the worst instructor portion only if there is more than one professor
             <div className="worst-prof-container">
               <CustomPieChart data={worstInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="worst-instructor-chart" hideLegend={true} />
-              <p className="small-text">Worst Instructor: {worstInstructor?.name}</p>
+              <p className="small-text"><b>{worstInstructor?.name}</b> performed the worst</p>
             </div>
           )}
-        </div>
       </div>
     </div>
   );

@@ -107,11 +107,11 @@ label {
   
   .question-container {
     display: flex;
-    width: 100%;
+    flex-direction: row;
+    width: 98%;
     margin-top: 20px;
     flex: 1;
     padding: 20px;
-    background-color: [Specify Color];
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
@@ -121,11 +121,6 @@ label {
     font-size: 18px;
   }
   
-  .worst-prof-container {
-    display: flex;
-    flex-direction: row;
-    margin-top: 20px;
-  }
   
   .custom-button:hover {
     background-color: #003791;
@@ -139,6 +134,7 @@ label {
     border-radius: 5px;
     cursor: pointer;
     margin: 10px;
+    margin-right: 5px;
   }
 
   .eval-container {
@@ -155,7 +151,36 @@ label {
     margin-top: 20px;
   }
 
-.h3 {
-    font-size: small;
-    padding-right: 30px;
+h1 {
+    padding-bottom: -5px;
+    font-size: xx-large;
+}
+
+h3 {
+    font-size: large;
+    font-weight: lighter;
+    font-style: italic;
+    padding-right: 5px;
+}
+
+.best-prof-chart-container {
+    width: 30vw; /* Adjust the width as needed */
+    display: flex;
+    flex-direction: row;
+    padding: 40px;
+    padding-right: 30%;
+}
+
+.worst-prof-container {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-end; 
+    margin-bottom: 10px; 
+    padding-left: 30%;
+}
+
+.small-text{
+    min-width: 30%;
+    padding: 20px;
+    font-size: large;
 }
