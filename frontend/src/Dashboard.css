@@ -185,13 +185,18 @@ h3 {
     font-size: large;
 }
 
+/* adds a subtle green outline to the highest GPA card */
+.highest-gpa-card {
+  outline: 2px solid #05f40da0; 
+}
+
 /* styles for loading spinner in instructor select */ 
 
 .loading-icon-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 200px; /* Adjust the height as needed */
+  height: 200px; 
 }
 
 .lds-ring {
@@ -207,7 +212,7 @@ h3 {
   width: 64px;
   height: 64px;
   margin: 8px;
-  border: 8px solid #00ccff;
+  border: 8px solid #57b4cb;
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
   border-color: #00ccff transparent transparent transparent;
@@ -229,3 +234,4 @@ h3 {
     transform: rotate(360deg);
   }
 }
+

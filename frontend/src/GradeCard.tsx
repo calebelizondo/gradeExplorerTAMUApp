@@ -4,9 +4,10 @@ import Chart from "chart.js/auto"; // Import Chart.js
 
 interface GradeCardProps {
     instructor: Instructor;
+    isHighestGPA: boolean;
 }
 
-const GradeCard: React.FC<GradeCardProps> = ({ instructor }) => {
+const GradeCard: React.FC<GradeCardProps> = ({ instructor, isHighestGPA = false }) => {
     const chartRef = useRef<HTMLCanvasElement | null>(null); // Ref for the canvas element
     const chartInstance = useRef<Chart<"bar"> | null>(null);
 
@@ -79,9 +80,9 @@ const GradeCard: React.FC<GradeCardProps> = ({ instructor }) => {
     }, [instructor]); 
 
     return (
-        <div className="professor-card">
+        <div className={`professor-card ${isHighestGPA ? 'highest-gpa-card' : ''}`}>
             <p>{instructor.name}</p>
-            <canvas  width="100%" height="80%" ref={chartRef}></canvas>
+            <canvas width="100%" height="80%" ref={chartRef}></canvas>
             <p>GPA: {Math.round(instructor.GPA * 100) / 100}</p>
         </div>
     );
