@@ -28,8 +28,17 @@ const InstructorSelect:React.FC<InstructorSelectorProps> = ({ instructors, addIn
     return (
         <div className="instructor-selection-container">
             {loading ? (
-                <div className="loading-animation">Loading...</div>
+                <div className="loading-icon-container">
+                    <div className="lds-ring"><div></div><div></div><div></div><div></div></div>
+                </div>
+                
             ) : (
+                <>
+                {instructors ? (
+                    <p>Select instructors to compare:</p>  
+                ) : (
+                    <p>Select section and course codes to view instructors:</p>
+                )}
                 <ul className="instructor-select-list">
                     {instructors?.map((instructor: Instructor) => (
                         <li key={instructor.name}>
@@ -40,6 +49,8 @@ const InstructorSelect:React.FC<InstructorSelectorProps> = ({ instructors, addIn
                         </li>
                     ))}
                 </ul>
+
+                </>
             )}
         </div>
     );
