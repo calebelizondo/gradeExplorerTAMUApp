@@ -188,7 +188,10 @@ h3 {
 /* styles for loading spinner in instructor select */ 
 
 .loading-icon-container {
+  display: flex;
+  justify-content: center;
   align-items: center;
+  height: 200px; /* Adjust the height as needed */
 }
 
 .lds-ring {
