@@ -52,6 +52,9 @@ const Dashboard = () => {
 
       // activate loading animation in selector list
       setIsFetching(true);
+      //reset the instructors to clear any previous selections
+      setInstructors(null);
+      setSelectedInstructors(null);
 
       fetch(`https://gradedashboardtamu.onrender.com/get_grades/${selectedCourse?.subjectCode}/${selectedCourse?.courseNumber}`)
         .then(response => response.json())
