@@ -6,7 +6,7 @@ interface PieChartProps {
   labels: string[];
   id: string;
   width?: string;
-  height?: string; 
+  height?: string;
   hideLegend?: boolean;
 }
 
@@ -35,13 +35,17 @@ const CustomPieChart: React.FC<PieChartProps> = ({
                 "rgba(255, 206, 86, 0.4)",
                 "rgba(54, 162, 235, 0.4)",
                 "rgba(255, 99, 132, 0.4)",
+                "rgba(153, 102, 255, 0.4)",
+                "rgba(255, 159, 64, 0.4)",
               ],
-              borderColor: [ 
+              borderColor: [
                 "rgba(75, 192, 192, .8)",
                 "rgba(255, 206, 86, .8)",
                 "rgba(54, 162, 235, .8)",
                 "rgba(255, 99, 132, .8)",
-              ], 
+                "rgba(153, 102, 255, .8)",
+                "rgba(255, 159, 64, .8)",
+              ],
             },
           ],
           labels: labels,
@@ -51,7 +55,7 @@ const CustomPieChart: React.FC<PieChartProps> = ({
             legend: {
               display: legendDisplay,
             },
-          }
+          },
         },
       });
 
@@ -61,10 +65,7 @@ const CustomPieChart: React.FC<PieChartProps> = ({
     }
   }, [data, labels, hideLegend]);
 
-  return (
-
-      <canvas id={id} width={width} height={height}></canvas>
-  );
+  return <canvas id={id} width={width} height={height}></canvas>;
 };
 
 export default CustomPieChart;

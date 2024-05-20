@@ -44,10 +44,16 @@ const CourseSelect: React.FC<CourseSelectProps> = ({ onCourseChange }) => {
 
     function handleCourseChange(event: React.ChangeEvent<HTMLSelectElement>) {
         const course = event.target.value;
-        setSelectedCourse(course);
 
-        // Send selected course to parent component
-        onCourseChange(new Course(selectedSubject, course));
+        if (course != ""){
+            setSelectedCourse(course);
+
+            // Send selected course to parent component
+            onCourseChange(new Course(selectedSubject, course));
+        } else {
+            onCourseChange(null);
+            setSelectedCourse("");
+        }
     }
 
     return (
