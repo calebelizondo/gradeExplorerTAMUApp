@@ -51,6 +51,7 @@ label {
     height: 300px;
     padding: 20px;
     overflow-x: auto; /* Enable horizontal scrolling */
+    overflow-y: hidden;
     white-space: nowrap; /* Prevent cards from wrapping to a new row */
     align-content: center;
 }
@@ -58,6 +59,7 @@ label {
 
 .professor-card {
     width: 200px; /* Set a fixed width for each card */
+    min-width: 150px;
     height: 90%;
     padding: 10px;
     border: 1px solid #ccc;
