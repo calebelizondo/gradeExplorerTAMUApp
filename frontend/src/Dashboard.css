@@ -23,7 +23,8 @@ label {
     flex-direction: column;
     align-content: left;
     align-items: left;
-    padding-right: 10%;
+    min-width: 100px;
+    padding-right: 100px;
 }
 
 .instructor-selection-container {
@@ -34,7 +35,7 @@ label {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     overflow-y: auto; 
     height: 200px; 
-    min-width: 70%;
+    width: 100%;
 }
 
 .instructor-selection-container > ul {
