@@ -6,6 +6,7 @@ import "./Dashboard.css";
 
 interface CourseEvalDisplayProps {
   instructors: Instructor[] | null;
+  onChange: () => void;
 }
 
 class Question {
@@ -49,27 +50,11 @@ const answers_t: string[][] = [
 
 const Questions: Question[] = questions_t.map((question, i) => new Question(question, answers_t[i]));
 
-const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ({ instructors }) => {
+const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ({ instructors, onChange }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const currentQuestion = Questions[currentQuestionIndex];
   const [bestInstructor, setBestInstructor] = useState<Instructor | null>(null);
   const [worstInstructor, setWorstInstructor] = useState<Instructor | null>(null);
-
-  function nextQuestion() {
-    if (currentQuestionIndex === Questions.length - 1) {
-      setCurrentQuestionIndex(0);
-    } else {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    }
-  }
-
-  function previousQuestion() {
-    if (currentQuestionIndex === 0) {
-      setCurrentQuestionIndex(Questions.length - 1);
-    } else {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
-    }
-  }
 
   useEffect(() => {
     if (instructors != null) {
@@ -115,10 +100,16 @@ const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ({ instructors }) =>
           <h1>Course Evaluation results: </h1>
           <div className="question-navigation">
             <h3>{'"' + currentQuestion.question + '"'}</h3>
-            <button className="custom-button" onClick={() => setCurrentQuestionIndex((prev) => (prev === 0 ? Questions.length - 1 : prev - 1))}>
+            <button className="custom-button" onClick={() => {
+                onChange();
+                setCurrentQuestionIndex((prev) => (prev === 0 ? Questions.length - 1 : prev - 1));
+              }}>
               Previous
             </button>
-            <button className="custom-button" onClick={() => setCurrentQuestionIndex((prev) => (prev === Questions.length - 1 ? 0 : prev + 1))}>
+            <button className="custom-button" onClick={() => {
+              onChange(); 
+              setCurrentQuestionIndex((prev) => (prev === Questions.length - 1 ? 0 : prev + 1))
+              }}>
               Next
             </button>
           </div>

@@ -46,13 +46,13 @@ const Dashboard = () => {
   // The instructors are being fetched (used to trigger loading animation in instructor selector)
   const [isFetching, setIsFetching] = useState(false);
 
+  const sendHeight = () => {
+    const height = document.documentElement.scrollHeight;
+    window.parent.postMessage({ type: 'SET_HEIGHT', height }, '*');
+  };
+
   //needs to sendHeight to dynamically size parent iframe on embed
   useEffect(() => {
-    const sendHeight = () => {
-      const height = document.documentElement.scrollHeight;
-      window.parent.postMessage({ type: 'SET_HEIGHT', height }, '*');
-    };
-
     sendHeight();
     window.addEventListener('resize', sendHeight);
 
@@ -122,7 +122,7 @@ const Dashboard = () => {
           </div>
           <GradeDistDisplay instructors={selectedInstructors} />
           <div className='eval-container'>
-            <CourseEvalDisplay instructors={selectedInstructors} />
+            <CourseEvalDisplay instructors={selectedInstructors} onChange={sendHeight} />
           </div>
         </div>
     );
