@@ -77,7 +77,6 @@ label {
     flex-direction: column;
     align-content: center;
     align-items: center;
-    padding: 10px;
 }
 
 .top-panel {
@@ -123,7 +122,6 @@ label {
     margin-top: -10px;
     font-size: 18px;
   }
-  
   
   .custom-button:hover {
     background-color: #003791;
@@ -194,7 +192,6 @@ h3 {
 }
 
 /* styles for loading spinner in instructor select */ 
-
 .loading-icon-container {
   display: flex;
   justify-content: center;

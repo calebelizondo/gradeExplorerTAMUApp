@@ -56,8 +56,6 @@ const Dashboard = () => {
     sendHeight();
     window.addEventListener('resize', sendHeight);
 
-    console.log("signal sent");
-
     return () => window.removeEventListener('resize', sendHeight);
   });
 
