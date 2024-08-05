@@ -5,19 +5,6 @@ import Dashboard from './Dashboard';
 
 function App() {
 
-  //needs to sendHeight to dynamically size parent iframe on embed
-  useEffect(() => {
-    const sendHeight = () => {
-      const height = document.documentElement.scrollHeight;
-      window.parent.postMessage({ type: 'SET_HEIGHT', height }, '*');
-    };
-
-    sendHeight();
-    window.addEventListener('resize', sendHeight);
-
-    return () => window.removeEventListener('resize', sendHeight);
-  }, []);
-
   return (
     <Dashboard />
   );

@@ -46,6 +46,19 @@ const Dashboard = () => {
   // The instructors are being fetched (used to trigger loading animation in instructor selector)
   const [isFetching, setIsFetching] = useState(false);
 
+  //needs to sendHeight to dynamically size parent iframe on embed
+  useEffect(() => {
+    const sendHeight = () => {
+      const height = document.documentElement.scrollHeight;
+      window.parent.postMessage({ type: 'SET_HEIGHT', height }, '*');
+    };
+
+    sendHeight();
+    window.addEventListener('resize', sendHeight);
+
+    return () => window.removeEventListener('resize', sendHeight);
+  }, []);
+
   //Fetch the instructors for the selected course
   useEffect(() => {
     if (selectedCourse != null) {
