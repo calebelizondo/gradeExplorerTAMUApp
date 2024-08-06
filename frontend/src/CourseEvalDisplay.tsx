@@ -113,18 +113,17 @@ const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ({ instructors, onCh
               Next
             </button>
           </div>
-
-          <div className="best-prof-chart-container">
-            <CustomPieChart data={bestInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="best-instructor-chart" width="80vw" />
-            <p className="small-text"><b>{bestInstructor?.name}</b> performed the best</p>
-          </div>
-        </div>
           {instructors.length > 1 && ( // Render the worst instructor portion only if there is more than one professor
             <div className="worst-prof-container">
               <CustomPieChart data={worstInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="worst-instructor-chart" hideLegend={true} />
               <p className="small-text"><b>{worstInstructor?.name}</b> performed the worst</p>
             </div>
           )}
+        </div>
+          <div className="best-prof-chart-container">
+            <CustomPieChart data={bestInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="best-instructor-chart" width="80vw" />
+            <p className="small-text"><b>{bestInstructor?.name}</b> performed the best</p>
+          </div>
       </div>
     </div>
   );

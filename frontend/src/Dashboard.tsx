@@ -54,9 +54,6 @@ const Dashboard = () => {
   //needs to sendHeight to dynamically size parent iframe on embed
   useEffect(() => {
     sendHeight();
-    window.addEventListener('resize', sendHeight);
-
-    return () => window.removeEventListener('resize', sendHeight);
   });
 
   //Fetch the instructors for the selected course

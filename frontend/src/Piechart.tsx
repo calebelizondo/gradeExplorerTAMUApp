@@ -65,7 +65,7 @@ const CustomPieChart: React.FC<PieChartProps> = ({
     }
   }, [data, labels, hideLegend]);
 
-  return <canvas id={id} width={width} height={height}></canvas>;
+  return <canvas id={id} width={width} height={height} />;
 };
 
 export default CustomPieChart;
