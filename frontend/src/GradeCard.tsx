@@ -80,7 +80,7 @@ const GradeCard: React.FC<GradeCardProps> = ({ instructor, isHighestGPA = false 
     }, [instructor]); 
 
     return (
-        <div key={instructor.name} className={`professor-card ${isHighestGPA ? 'highest-gpa-card' : ''}`}>
+        <div className={`professor-card ${isHighestGPA ? 'highest-gpa-card' : ''}`}>
             <p>{instructor.name}</p>
             <canvas width="100%" height="80%" ref={chartRef}></canvas>
             <p>GPA: {Math.round(instructor.GPA * 100) / 100}</p>

@@ -14,6 +14,7 @@ const GradeDistDisplay: React.FC<GradeDistDisplayProps> = ({ instructors }) => {
         <div className="grade-dists-container">
             {sortedInstructors.map((instructor, index) => (
                 <GradeCard
+                    key={instructor.name}
                     instructor={instructor}
                     isHighestGPA={index === 0} // Check if it's the instructor with the highest GPA
                 />

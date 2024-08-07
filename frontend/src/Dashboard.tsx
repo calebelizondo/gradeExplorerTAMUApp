@@ -52,7 +52,6 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    // Initial height
     sendHeight();
 
     const resizeObserver = new ResizeObserver(() => {
