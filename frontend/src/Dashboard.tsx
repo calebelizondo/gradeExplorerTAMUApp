@@ -51,10 +51,20 @@ const Dashboard = () => {
     window.parent.postMessage({ type: 'SET_HEIGHT', height }, '*');
   };
 
-  //needs to sendHeight to dynamically size parent iframe on embed
   useEffect(() => {
+    // Initial height
     sendHeight();
-  });
+
+    const resizeObserver = new ResizeObserver(() => {
+      sendHeight();
+    });
+
+    resizeObserver.observe(document.body);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
 
   //Fetch the instructors for the selected course
   useEffect(() => {
