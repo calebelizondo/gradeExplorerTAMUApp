@@ -126,7 +126,7 @@ const Dashboard = () => {
             <CourseSelect onCourseChange={setSelectedCourse} />
             <InstructorSelect instructors={instructors} addInstructor={addInstructor} removeInstructor={removeInstructor} loading={isFetching}  />
           </div>
-          <GradeDistDisplay instructors={selectedInstructors} />
+          <GradeDistDisplay instructors={selectedInstructors} course={selectedCourse}/>
           <div className='eval-container'>
             <CourseEvalDisplay instructors={selectedInstructors} onChange={sendHeight} />
           </div>

@@ -21,7 +21,7 @@ def calculate_gpa(grade_counts):
 
     return total_points / total_students
 
-def get_grades(request, subject_code, course_code):
+def get_grades(_, subject_code, course_code):
 
     subject_code = subject_code.upper()
     course_code = course_code.upper()
@@ -56,14 +56,14 @@ def get_grades(request, subject_code, course_code):
     return JsonResponse(professor_data, safe=False)
 
 
-def get_subject_codes(request):
+def get_subject_codes(_):
 
     unique_subject_codes = Section_grades.objects.values_list('subject_code', flat=True).distinct()
 
     # Convert the subject_data list to JSON
     return JsonResponse(list(unique_subject_codes), safe=False)
 
-def get_course_codes(request, subject_code):
+def get_course_codes(_, subject_code):
 
     course_codes = Section_grades.objects.filter(subject_code=subject_code).values_list('course_code', flat=True).distinct()
 
@@ -79,7 +79,7 @@ def get_eval_score(responses):
 
 
 #returns a professor's evaluation scores given a name, subject code and course number
-def get_evals(request, subject_code, course_code, prof_name):
+def get_evals(_, subject_code, course_code, prof_name):
 
     #spaces cannot be in urls, so each space in the name was replaced with a '+'
     prof_name = prof_name.replace("+", " ")
@@ -117,7 +117,7 @@ def get_evals(request, subject_code, course_code, prof_name):
 
     return JsonResponse(eval_answers, safe=False)
 
-def get_detailed_grades(request, subject_code, course_code, prof_name):
+def get_detailed_grades(_, subject_code, course_code, prof_name):
 
     response = {}
     prof_name = prof_name.replace("+", " ")
