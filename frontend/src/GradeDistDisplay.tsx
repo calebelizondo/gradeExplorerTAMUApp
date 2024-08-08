@@ -15,11 +15,13 @@ const GradeDistDisplay: React.FC<GradeDistDisplayProps> = ({ instructors, course
 
     useEffect(() => {
         if (instructors == null || course == null) setSelectedInstructor(null);
+        if (sortedInstructors.length === 1) setSelectedInstructor(sortedInstructors[0]);
     });
 
     return (
         <>
             <div className="grade-dists-container">
+                <div className="card-display-container">
                 {sortedInstructors.map((instructor) => (
                     <GradeCard
                         key={instructor.name}
@@ -28,10 +30,11 @@ const GradeDistDisplay: React.FC<GradeDistDisplayProps> = ({ instructors, course
                         onClick={setSelectedInstructor}
                     />
                 ))}
+                </div>
+                {selectedInstructor !== null && course !== null && (
+                    <DetailedGradeDisplay instructor={selectedInstructor} course={course}/>
+                )}
             </div>
-            {selectedInstructor !== null && course !== null && (
-                <DetailedGradeDisplay instructor={selectedInstructor} course={course}/>
-            )}
         </>
     );
 };

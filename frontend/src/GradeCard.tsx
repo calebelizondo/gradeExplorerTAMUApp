@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Instructor } from "./Dashboard";
-import Chart from "chart.js/auto"; // Import Chart.js
+import Chart from "chart.js/auto"; 
 
 interface GradeCardProps {
     instructor: Instructor;
@@ -9,7 +9,7 @@ interface GradeCardProps {
 }
 
 const GradeCard: React.FC<GradeCardProps> = ({ instructor, isSelected = false, onClick }) => {
-    const chartRef = useRef<HTMLCanvasElement | null>(null); // Ref for the canvas element
+    const chartRef = useRef<HTMLCanvasElement | null>(null); 
     const chartInstance = useRef<Chart<"bar"> | null>(null);
 
     // Create the Chart.js instance for instructor grade distribution when the component mounts
