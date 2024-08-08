@@ -35,7 +35,6 @@ def get_grades(request, subject_code, course_code):
 
     for professor in professors:
         professor_grades = section_grades.filter(professor_name=professor)
-        print(professor_grades)
 
         # Calculate the grade distribution for the professor
         grade_distribution = {'a': 0, 'b': 0, 'c': 0, 'd': 0, 'f': 0}
@@ -117,3 +116,22 @@ def get_evals(request, subject_code, course_code, prof_name):
     }
 
     return JsonResponse(eval_answers, safe=False)
+
+def get_detailed_grades(request, subject_code, course_code, prof_name):
+
+    response = {}
+    prof_name = prof_name.replace("+", " ")
+
+    sections = Section_grades.objects.filter(subject_code=subject_code, course_code=course_code, professor_name=prof_name)
+    unique_years = sections.values_list('year', flat=True).distinct()
+
+    for year in unique_years: 
+        sections_in_year = sections.filter(year=year)
+        grade_distribution = {'a': 0, 'b': 0, 'c': 0, 'd': 0, 'f': 0}
+        for section in sections_in_year:
+            for grade in grading_system.keys():
+                grade_distribution[grade] += getattr(section, "{}_count".format(grade.lower()), 0)
+        response[year] = grade_distribution
+
+
+    return JsonResponse(response, safe=False)

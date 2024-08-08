@@ -55,6 +55,7 @@ const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ({ instructors, onCh
   const currentQuestion = Questions[currentQuestionIndex];
   const [bestInstructor, setBestInstructor] = useState<Instructor | null>(null);
   const [worstInstructor, setWorstInstructor] = useState<Instructor | null>(null);
+  const [legendHTML, setLegendHTML] = useState('');
 
   useEffect(() => {
     if (instructors != null) {
@@ -95,7 +96,6 @@ const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ({ instructors, onCh
   return (
     <div>
       <div className="question-container">
-
         <div>
           <h1>Course Evaluation results: </h1>
           <div className="question-navigation">
@@ -115,7 +115,7 @@ const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ({ instructors, onCh
           </div>
           {instructors.length > 1 && ( // Render the worst instructor portion only if there is more than one professor
             <div className="worst-prof-container">
-              <CustomPieChart data={worstInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="worst-instructor-chart" hideLegend={true} />
+              <CustomPieChart data={worstInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="worst-instructor-chart" />
               <p className="small-text"><b>{worstInstructor?.name}</b> performed the worst</p>
             </div>
           )}
@@ -125,6 +125,7 @@ const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ({ instructors, onCh
             <p className="small-text"><b>{bestInstructor?.name}</b> performed the best</p>
           </div>
       </div>
+      <div className="legend-container"></div>
     </div>
   );
 };

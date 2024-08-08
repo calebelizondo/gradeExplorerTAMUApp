@@ -7,7 +7,7 @@ interface PieChartProps {
   id: string;
   width?: string;
   height?: string;
-  hideLegend?: boolean;
+  updateLegend?: () => void;
 }
 
 const CustomPieChart: React.FC<PieChartProps> = ({
@@ -16,15 +16,13 @@ const CustomPieChart: React.FC<PieChartProps> = ({
   id,
   width = "auto", // Default width if not provided
   height = "auto", // Default height if not provided
-  hideLegend = false,
+  updateLegend
 }) => {
   useEffect(() => {
     if (data && data.length > 0) {
       const ctx = document.getElementById(id) as HTMLCanvasElement;
 
-      const legendDisplay = hideLegend ? false : true;
-
-      const myPieChart = new Chart(ctx, {
+      const chart = new Chart(ctx, {
         type: "pie",
         data: {
           datasets: [
@@ -53,17 +51,17 @@ const CustomPieChart: React.FC<PieChartProps> = ({
         options: {
           plugins: {
             legend: {
-              display: legendDisplay,
+              display: false,
             },
           },
         },
       });
 
       return () => {
-        myPieChart.destroy();
+        chart.destroy();
       };
     }
-  }, [data, labels, hideLegend]);
+  }, [data, labels]);
 
   return <canvas id={id} width={width} height={height} />;
 };
