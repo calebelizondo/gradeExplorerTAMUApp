@@ -18,10 +18,16 @@ const GradeDistDisplay: React.FC<GradeDistDisplayProps> = ({ instructors, course
         else setSelectedInstructor(instructor); 
     }
 
+    useEffect(() => {
+        if (selectedInstructor !== null && 
+            !sortedInstructors.includes(selectedInstructor))
+            setSelectedInstructor(null);
+    }, [instructors]);
+
     return (
         <>
             <div className="grade-dists-container">
-                <div className="card-display-container" style={ {width: selectedInstructor ? "50%" : "100%"} }>
+                <div className="card-display-container" style={ {width: "100%"}}>
                 {sortedInstructors.map((instructor) => (
                     <GradeCard
                         key={instructor.name}
@@ -31,12 +37,12 @@ const GradeDistDisplay: React.FC<GradeDistDisplayProps> = ({ instructors, course
                     />
                 ))}
                 </div>
-                {selectedInstructor !== null && course !== null && (
-                    <DetailedGradeDisplay instructor={selectedInstructor} course={course}/>
-                )}
             </div>
+            {selectedInstructor !== null && course !== null && (
+                <DetailedGradeDisplay instructor={selectedInstructor} course={course}/>
+            )}
             {course && instructors !== null && (
-                <p><a href="https://www.kaggle.com/datasets/sst001/texas-a-and-m-university-grades-and-aefis-dataset">Grade data</a> from Fall 2018-Fall 2022. Select an instructor for more details.</p>
+                <p><i><a href="https://www.kaggle.com/datasets/sst001/texas-a-and-m-university-grades-and-aefis-dataset">Grade data</a> from Fall 2018-Fall 2022. Select an instructor for more details.</i></p>
             )}
         </>
     );

@@ -66,7 +66,6 @@ label {
   flex-direction: row;
   justify-content: flex-start;
   height: 300px;
-  padding: 20px;
   overflow-x: auto; /* Enable horizontal scrolling */
   overflow-y: hidden;
   white-space: nowrap; /* Prevent cards from wrapping to a new row */
