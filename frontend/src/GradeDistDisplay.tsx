@@ -13,21 +13,21 @@ const GradeDistDisplay: React.FC<GradeDistDisplayProps> = ({ instructors, course
     const sortedInstructors = [...(instructors || [])].sort((a, b) => b.GPA - a.GPA);
     const [selectedInstructor, setSelectedInstructor] = useState<Instructor | null>(instructors ? instructors[0] : null);
 
-    useEffect(() => {
-        if (instructors == null || course == null) setSelectedInstructor(null);
-        if (sortedInstructors.length === 1) setSelectedInstructor(sortedInstructors[0]);
-    });
+    const instructorClickHandler = (instructor: Instructor) => {
+        if (instructor == selectedInstructor) setSelectedInstructor(null);
+        else setSelectedInstructor(instructor); 
+    }
 
     return (
         <>
             <div className="grade-dists-container">
-                <div className="card-display-container">
+                <div className="card-display-container" style={ {width: selectedInstructor ? "50%" : "100%"} }>
                 {sortedInstructors.map((instructor) => (
                     <GradeCard
                         key={instructor.name}
                         instructor={instructor}
                         isSelected={instructor === selectedInstructor} // Check if it's the instructor with the highest GPA
-                        onClick={setSelectedInstructor}
+                        onClick={instructorClickHandler}
                     />
                 ))}
                 </div>
@@ -35,6 +35,9 @@ const GradeDistDisplay: React.FC<GradeDistDisplayProps> = ({ instructors, course
                     <DetailedGradeDisplay instructor={selectedInstructor} course={course}/>
                 )}
             </div>
+            {course && instructors !== null && (
+                <p><a href="https://www.kaggle.com/datasets/sst001/texas-a-and-m-university-grades-and-aefis-dataset">Grade data</a> from Fall 2018-Fall 2022. Select an instructor for more details.</p>
+            )}
         </>
     );
 };
