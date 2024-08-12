@@ -51,8 +51,14 @@ const Dashboard = () => {
     window.parent.postMessage({ type: 'SET_HEIGHT', height }, '*');
   };
 
+  const sendWidth = () => {
+    const width = document.documentElement.scrollWidth;
+    window.parent.postMessage({ type: 'SET_WIDTH', width}, '*');
+  };
+
   useEffect(() => {
     sendHeight();
+    sendWidth();
 
     const resizeObserver = new ResizeObserver(() => {
       sendHeight();
@@ -111,7 +117,6 @@ const Dashboard = () => {
       console.error('Error fetching evals:', error);
     }
   }
-  
 
   function removeInstructor(instructor: Instructor) {
     if (selectedInstructors == null) {
