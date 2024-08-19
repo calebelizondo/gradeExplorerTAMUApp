@@ -86,18 +86,25 @@ interface GradeData {
               ]
             },
             options: {
-                plugins: {
-                    legend: {
-                    display: false,
-                    },
-                },
-                scales: {
-                    y: {
-                    beginAtZero: true,
-                    position: 'right',
-                    },
-                },
-            },
+              maintainAspectRatio: true,
+              plugins: {
+                  legend: {
+                      display: false,
+                  },
+              },
+              scales: {
+                  x: {
+                      beginAtZero: true,
+                      ticks: {
+                          autoSkip: false, 
+                      },
+                  },
+                  y: {
+                      beginAtZero: true,
+                      position: 'right',
+                  },
+              },
+          },
           });
         }
       }
@@ -107,7 +114,7 @@ interface GradeData {
       <div className="detailed-grade-container">
         <div>
             <p>Grade Distribution for <b>{instructor.name}</b> - {course.subjectCode} {course.courseNumber}</p>
-            <canvas width="100%" height="80%" ref={chartRef}></canvas>
+            <canvas width="100vw" ref={chartRef}></canvas>
         </div>
       </div>
     );

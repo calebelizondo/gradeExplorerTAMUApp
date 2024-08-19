@@ -42,7 +42,7 @@ const GradeDistDisplay: React.FC<GradeDistDisplayProps> = ({ instructors, course
                 <DetailedGradeDisplay instructor={selectedInstructor} course={course}/>
             )}
             {course && instructors !== null && (
-                <p><i><a href="https://www.kaggle.com/datasets/sst001/texas-a-and-m-university-grades-and-aefis-dataset">Grade data</a> from Fall 2018-Fall 2022. Select an instructor for more details.</i></p>
+                <p><i><a href="https://www.kaggle.com/datasets/sst001/texas-a-and-m-university-grades-and-aefis-dataset">Grade data</a> from Fall 2020-Fall 2022. Select an instructor for more details.</i></p>
             )}
         </>
     );
