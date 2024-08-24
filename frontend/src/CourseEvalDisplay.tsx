@@ -93,26 +93,28 @@ const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ({ instructors, onCh
     return null; // Don't render anything if there are no instructors
   }
 
+  /*
+
   return (
     <div>
       <div className="question-container">
         <div>
-          <h1>Course Evaluation results: </h1>
           <div className="question-navigation">
-            <h3>{'"' + currentQuestion.question + '"'}</h3>
+            <h1>Course Evaluation results: </h1>
             <button className="custom-button" onClick={() => {
-                onChange();
-                setCurrentQuestionIndex((prev) => (prev === 0 ? Questions.length - 1 : prev - 1));
-              }}>
-              Previous
+                  onChange();
+                  setCurrentQuestionIndex((prev) => (prev === 0 ? Questions.length - 1 : prev - 1));
+                }}>
+                Previous
             </button>
             <button className="custom-button" onClick={() => {
-              onChange(); 
-              setCurrentQuestionIndex((prev) => (prev === Questions.length - 1 ? 0 : prev + 1))
-              }}>
-              Next
+                onChange(); 
+                setCurrentQuestionIndex((prev) => (prev === Questions.length - 1 ? 0 : prev + 1))
+                }}>
+                Next
             </button>
           </div>
+          <h3>{'"' + currentQuestion.question + '"'}</h3>
           {instructors.length > 1 && ( // Render the worst instructor portion only if there is more than one professor
             <div className="worst-prof-container">
               <CustomPieChart data={worstInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="worst-instructor-chart" />
@@ -128,6 +130,38 @@ const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ({ instructors, onCh
       <div className="legend-container"></div>
     </div>
   );
+  */
+
+  return (
+    <>
+      <h1>Course Evaluation results: <i>{'"' + currentQuestion.question + '"'}</i> </h1>
+      <div>
+        <button className="custom-button" onClick={() => {
+          onChange();
+          setCurrentQuestionIndex((prev) => (prev === 0 ? Questions.length - 1 : prev - 1));
+          }}>
+          Previous
+        </button>
+        <button className="custom-button" onClick={() => {
+          onChange(); 
+          setCurrentQuestionIndex((prev) => (prev === Questions.length - 1 ? 0 : prev + 1))
+          }}>
+          Next
+        </button>
+      </div>
+      <h3>{'"' + currentQuestion.question + '"'}</h3>
+      <div className="prof-eval-chart-container">
+        <div style={ { width: "70%", alignContent: "center" } }>
+          <CustomPieChart data={bestInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="best-instructor-chart"/>
+        </div>
+        {instructors.length > 1 && (
+          <div style={ { width: "70%", alignContent: "center" } }>
+            <CustomPieChart data={worstInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="worst-instructor-chart" width="10%"/>
+          </div>
+        )}
+      </div>
+    </>
+  )
 };
 
 export default CourseEvalDisplay;

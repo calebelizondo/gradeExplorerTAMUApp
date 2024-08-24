@@ -103,6 +103,7 @@ label {
     flex-direction: column;
     align-content: center;
     align-items: center;
+    align-self: center;
 }
 
 .top-panel {
@@ -145,7 +146,6 @@ label {
   }
 
   #question-text {
-    margin-top: -10px;
     font-size: 18px;
   }
   
@@ -162,24 +162,26 @@ label {
     cursor: pointer;
     margin: 10px;
     margin-right: 5px;
+    max-height: 30px;
+    width: 80px; 
+    justify-content: center;
   }
 
   .eval-container {
+    display: flex;
+    flex-direction: column;
     align-self: left;
     width: 100%;
-    min-height: 400px;
   }
 
   .question-navigation {
     display: flex;
     flex-direction: row;
-
     justify-content: left;
     margin-top: 20px;
   }
 
 h1 {
-    padding-bottom: -5px;
     font-size: xx-large;
 }
 
@@ -263,3 +265,10 @@ h3 {
   }
 }
 
+.prof-eval-chart-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 16px;
+  align-items: center;
+}
