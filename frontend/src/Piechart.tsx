@@ -7,7 +7,7 @@ interface PieChartProps {
   id: string;
   width?: string;
   height?: string;
-  updateLegend?: () => void;
+  updateLegend?: (legend: string) => void;
 }
 
 const CustomPieChart: React.FC<PieChartProps> = ({
@@ -22,9 +22,30 @@ const CustomPieChart: React.FC<PieChartProps> = ({
     if (data && data.length > 0) {
       const ctx = document.getElementById(id) as HTMLCanvasElement;
 
+      // Custom plugin to generate the legend and pass it to the parent
+      const customLegendPlugin = {
+        id: "customLegend",
+        afterUpdate(chart: any) {
+          if (updateLegend) {
+            const legendItems = chart.legend.legendItems;
+            const legendHtml = legendItems
+              .map(
+                (item: any) =>
+                  `<div style="display: flex; align-items: center; margin-right: 10px;">
+                     <div style="width: 12px; height: 12px; background-color: ${item.fillStyle}; margin-right: 5px;"></div>
+                     <span style="color: #333;">${item.text}</span>
+                   </div>`
+              )
+              .join("");
+            updateLegend(legendHtml);
+          }
+        },
+      };
+
       const chart = new Chart(ctx, {
         type: "pie",
         data: {
+          labels: labels,
           datasets: [
             {
               data: data,
@@ -46,22 +67,22 @@ const CustomPieChart: React.FC<PieChartProps> = ({
               ],
             },
           ],
-          labels: labels,
         },
         options: {
           plugins: {
             legend: {
-              display: false,
+              display: false, // We handle the legend manually
             },
           },
         },
+        plugins: [customLegendPlugin], // Add the custom plugin here
       });
 
       return () => {
         chart.destroy();
       };
     }
-  }, [data, labels]);
+  }, [data, labels, updateLegend, id]);
 
   return <canvas id={id} width={width} height={height} />;
 };

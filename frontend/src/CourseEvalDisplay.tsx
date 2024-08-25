@@ -132,33 +132,44 @@ const CourseEvalDisplay: React.FC<CourseEvalDisplayProps> = ({ instructors, onCh
   );
   */
 
+
+  console.log(legendHTML);
+
   return (
     <>
       <h1>Course Evaluation results: <i>{'"' + currentQuestion.question + '"'}</i> </h1>
-      <div>
-        <button className="custom-button" onClick={() => {
-          onChange();
-          setCurrentQuestionIndex((prev) => (prev === 0 ? Questions.length - 1 : prev - 1));
-          }}>
-          Previous
-        </button>
-        <button className="custom-button" onClick={() => {
-          onChange(); 
-          setCurrentQuestionIndex((prev) => (prev === Questions.length - 1 ? 0 : prev + 1))
-          }}>
-          Next
-        </button>
-      </div>
-      <h3>{'"' + currentQuestion.question + '"'}</h3>
       <div className="prof-eval-chart-container">
-        <div style={ { width: "70%", alignContent: "center" } }>
-          <CustomPieChart data={bestInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="best-instructor-chart"/>
+        <div style={ { width: "70%", alignContent: "center", alignItems: "center" } }>
+          <CustomPieChart data={bestInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="best-instructor-chart" updateLegend={setLegendHTML}/>
+          <p className="small-text"><b>{bestInstructor?.name}</b> performed the best</p>
         </div>
         {instructors.length > 1 && (
           <div style={ { width: "70%", alignContent: "center" } }>
             <CustomPieChart data={worstInstructor?.evalResponses?.[currentQuestionIndex]} labels={answers_t[currentQuestionIndex]} id="worst-instructor-chart" width="10%"/>
+            <p className="small-text"><b>{worstInstructor?.name}</b> performed the worst</p>
           </div>
         )}
+        <div>
+          <div>
+            <button className="custom-button" onClick={() => {
+              onChange();
+              setCurrentQuestionIndex((prev) => (prev === 0 ? Questions.length - 1 : prev - 1));
+              }}>
+              Previous
+            </button>
+            <button className="custom-button" onClick={() => {
+              onChange(); 
+              setCurrentQuestionIndex((prev) => (prev === Questions.length - 1 ? 0 : prev + 1))
+              }}>
+              Next
+            </button>
+        </div>
+          <div
+            id="legend"
+            dangerouslySetInnerHTML={{ __html: legendHTML }}
+            style={{ marginTop: "20px", textAlign: "center" }} // Control legend placement here
+          />
+        </div>
       </div>
     </>
   )

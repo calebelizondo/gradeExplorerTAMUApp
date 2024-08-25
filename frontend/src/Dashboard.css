@@ -182,14 +182,14 @@ label {
   }
 
 h1 {
-    font-size: xx-large;
+  font-size: xx-large;
 }
 
 h3 {
-    font-size: large;
-    font-weight: lighter;
-    font-style: italic;
-    padding-right: 5px;
+  font-size: large;
+  font-weight: lighter;
+  font-style: italic;
+  padding-right: 5px;
 }
 
 .best-prof-chart-container {
@@ -265,10 +265,18 @@ h3 {
   }
 }
 
+h1 i {
+  font-weight: 200;
+  color: #50545a;
+}
+
 .prof-eval-chart-container {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(2, 1fr); 
+  grid-template-columns: repeat(3, 1fr); 
   gap: 16px;
   align-items: center;
+  align-content: center;
+  text-align: center;
+  justify-content: center;
 }
