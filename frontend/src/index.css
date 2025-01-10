@@ -8,20 +8,27 @@
   font-weight: 400;
   color: rgba(0, 0, 0, 0.87);
   background-color: #ffffff;
-
+  
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  flex-direction: column; 
+  height: 100%;
+  width: 100%;
 }
 
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column; 
+  height: 100%;
+  width: 100%;
+  padding-top: 20px;
 }
 
 h1 {
