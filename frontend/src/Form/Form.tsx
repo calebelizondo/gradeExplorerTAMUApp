@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
 import "./styles.css";
 import { FormState } from "../App";
-import { BACKEND_URL } from "../consts";
 
 interface FormProps {
   formState: FormState | null;

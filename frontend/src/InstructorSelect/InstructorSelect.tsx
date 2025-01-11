@@ -1,5 +1,4 @@
 import { Instructor } from '../App';
-import Spinner from '../spinner/Spinner';
 
 interface InstructorSelectProps {
   instructors: Instructor[];

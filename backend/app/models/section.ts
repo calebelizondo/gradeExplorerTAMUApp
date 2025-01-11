@@ -3,62 +3,62 @@ import { BaseModel, column } from '@adonisjs/lucid/orm';
 
 export default class Section extends BaseModel {
   @column({ isPrimary: true })
-  public id: number;
+  public id: number = 0;
 
   @column()
-  public dept: string;
+  public dept: string = '';
 
   @column()
-  public number: string;
+  public number: string = '';
 
   @column()
-  public section: string;
+  public section: string = '';
 
   @column()
-  public a: number;
+  public a: number = -1;
 
   @column()
-  public b: number;
+  public b: number = -1;
 
   @column()
-  public c: number;
+  public c: number = -1;
 
   @column()
-  public d: number;
+  public d: number = -1;
 
   @column()
-  public f: number;
+  public f: number = -1;
 
   @column()
-  public i: number;
+  public i: number = -1;
 
   @column()
-  public s: number;
+  public s: number = -1;
 
   @column()
-  public u: number;
+  public u: number = -1;
 
   @column()
-  public q: number;
+  public q: number = -1;
 
   @column()
-  public x: number;
+  public x: number = -1;
 
   @column()
-  public prof: string;
+  public prof: string = '';
 
   @column()
-  public year: string;
+  public year: string = '';
 
   @column()
-  public semester: string;
+  public semester: string = '';
 
   @column()
-  public gpa: string;
+  public gpa: string = '';
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime;
+  public createdAt: DateTime | null = null;
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime;
+  public updatedAt: DateTime | null = null;
 }

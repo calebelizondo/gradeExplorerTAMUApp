@@ -7,6 +7,10 @@ import csv from 'csv-parser';
 
 const scrape_url = "https://anex.us/grades/getData/";
 
+router.get('./', async ({ response }) => {
+  response.download('index.html')
+})
+
 const generateCourseNumbers = (): string[] => {
   const numbers = [];
   for (let i = 0; i < 1000; i++) {
@@ -231,3 +235,5 @@ router.get('/scrape', async (ctx: any) => {
     });
   }
 });
+
+
