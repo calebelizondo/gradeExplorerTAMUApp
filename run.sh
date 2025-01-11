@@ -1,21 +1,8 @@
 #!/bin/bash
 
-# Check if venv folder exists, if not create one
-if [ ! -d "venv" ]; then
-    echo "Creating virtual environment..."
-    python -m venv venv
-fi
+export $(grep -v '^#' .env | xargs)
 
-# Run Django
-echo "Starting Django development server..."
-source venv/Scripts/activate
-pip install -r requirements.txt
-python manage.py makemigrations
-python manage.py migrate
-python manage.py runserver &
-
-# Run React
-echo "Starting React development server..."
-cd frontend
-npm install --force
-npm run start
+set -e
+cd backend/build
+npm ci --omit="dev"
+node bin/server.js    
