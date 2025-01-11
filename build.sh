@@ -8,6 +8,7 @@ set -e
 echo "Building frontend application..."
 cd frontend
 npm install
+npm install --save-dev @types/react @types/react-dom
 npm run build
 cd ..
 
