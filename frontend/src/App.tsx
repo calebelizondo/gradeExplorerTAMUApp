@@ -19,6 +19,31 @@ function App() {
 
   const [courseNumbers, setCourseNumbers] = useState<Record<string, string[]> | null>(null);
 
+  const sendHeight = () => {
+    const height = document.documentElement.scrollHeight;
+    window.parent.postMessage({ type: 'SET_HEIGHT', height }, '*');
+  };
+
+  const sendWidth = () => {
+    const width = document.documentElement.scrollWidth;
+    window.parent.postMessage({ type: 'SET_WIDTH', width}, '*');
+  };
+
+  useEffect(() => {
+    sendHeight();
+    sendWidth();
+
+    const resizeObserver = new ResizeObserver(() => {
+      sendHeight();
+    });
+
+    resizeObserver.observe(document.body);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+
   useEffect(() => {
     fetch(`${BACKEND_URL}/get_codes`)
       .then((response) => {
