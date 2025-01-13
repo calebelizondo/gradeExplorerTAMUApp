@@ -7,6 +7,8 @@ import csv from 'csv-parser';
 
 const scrape_url = "https://anex.us/grades/getData/";
 
+const SUBJECTCODES = ["CEHD","EDAD","EHRD","TCMG","BEFB","BIED","CPSY","EDTC","EPFB","EPSY","INST","SEFB","SPED","SPSY","ATTR","DCED","HEFB","HLTH","KINE","KNFB","SPMT","EDCI","MASC","MEFB","RDNG","TEED","TEFB","NURS","ACCT","BUAD","BUSN","IBUS","FINC","ISTM","SCMT","MGMT","MKTG","VMID","VIBS","VLCS","VTPP","VSCS","VTPB","BIMS","VPAT","VTMI","ASCC","ARCH","ENDS","CARC","COSC","LAND","LDEV","PLAN","URPN","URSC","ARTS","VIST","VIZA","AERS","SOMS","MLSC","NVSC","EDHP","HCPI","MPHY","MPIM","MSCI","UGST","AGCJ","AGSC","ALEC","ALED","AGEC","ANSC","BICH","GENE","AGSM","BAEN","AGLS","ESSM","RENR","WFSC","ENTO","FIVS","NFSC","HORT","BESC","PLPA","POSC","RPTS","MEPS","SCSC","ANTH","MUST","AFST","LBAR","LMAS","RELS","WGST","COMM","JOUR","ECMT","ECON","ENGL","LING","HISP","SPAN","HIST","ARAB","CHIN","CLAS","EURO","FREN","GERM","INTS","ITAL","JAPN","RUSS","FILM","MUSC","PERF","THAR","PHIL","POLS","PSYC","SOCI","BIOL","EEBL","CHEM","NRSC","SCEN","MATH","ASTR","PHYS","STAT","AERO","MEMA","BMEN","BIOT","CHEN","SENG","CVEN","EVEN","CLEN","ENGR","ICPE","CSCE","ECEN","ESET","IDIS","MMET","MXET","TCMT","ISEN","MSEN","MEEN","AREN","ITDE","NUEN","OCEN","PETE","ATMO","GEOS","GEOG","GEOL","GEOP","OCNG","PHAR","HPCH","PHEO","PHEB","PHPM","PHLT","SOPH","BUSH","INTA","PSAA","OBIO","PROS","DDHS","OMFS","ORTH","PEDD","PERI","CYBR","WMHS","NEXT","HHUM","MODL","DASC","AEGD","DHUM","ASIA","FSTC","NUTR","MTDE","BESL","LDTC","ANLY","RWFM","FORS","PBSI","ECCB","ENTC","SSEN"]
+
 router.get('./', async ({ response }) => {
   response.download('index.html')
 })
@@ -135,28 +137,15 @@ router.get('/get_codes', async (ctx: any) => {
 
 router.get('/scrape', async (ctx: any) => {
   const {start} = ctx.request.qs();
-  const deptCodes = new Set<string>();
-
-  // Step 1: Read and Parse the CSV file
-  await new Promise((resolve, reject) => {
-    fs.createReadStream('../sections.csv') 
-      .pipe(csv())
-      .on('data', (row) => {
-        deptCodes.add(row.subject_code);
-      })
-      .on('end', () => {
-        resolve(true);
-      })
-      .on('error', (error) => {
-        reject(error);
-      });
-  });
   const courseNumbers = generateCourseNumbers();
-  const j : string[] = Array.from(deptCodes);
-  if (start) j.splice(0, j.indexOf(start) - 1);
+  let codes = SUBJECTCODES;
+  if (start) codes.splice(0, codes.indexOf(start) - 1);
 
-  const subjectCodes = j;
+  const subjectCodes = codes;
   let count = 0;
+
+  console.log(subjectCodes);
+
 
 
   try {
