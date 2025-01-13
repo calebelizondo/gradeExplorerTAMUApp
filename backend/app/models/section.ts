@@ -3,7 +3,7 @@ import { BaseModel, column } from '@adonisjs/lucid/orm';
 
 export default class Section extends BaseModel {
   @column({ isPrimary: true })
-  public id: number = 0;
+  public id: number;
 
   @column()
   public dept: string = '';
